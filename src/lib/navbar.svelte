@@ -21,7 +21,7 @@
     </li>
   </ul>
   <div class="background-selector">
-    <label for="bg-select"> Background: </label>
+    <label for="bg-select"> Theme: </label>
     <select id="bg-select" bind:value={selectedBackground}>
       {#each backgroundOptions as background}
         <option value={background.value}>{background.name}</option>

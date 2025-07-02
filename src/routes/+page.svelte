@@ -39,13 +39,12 @@
 	}
 </script>
 
-<div class="action-buttons">
-	<PlayPauseButtons onPlay={handlePlay} onPause={handlePause} />
-	<ResetButton onReset={handleReset} />
-</div>
-
 <div class="timer">
 	<h1>{time}</h1>
+	<div class="action-buttons">
+		<PlayPauseButtons onPlay={handlePlay} onPause={handlePause} />
+		<ResetButton onReset={handleReset} />
+	</div>
 </div>
 
 <style lang="scss">
@@ -64,9 +63,12 @@
 	}
 
 	.timer {
-		@extend .flex-center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		> h1 {
 			font-size: clamp(3rem, 20vw, 10rem);
+			margin-bottom: 3% !important;
 			font-weight: 700;
 			color: #fff;
 			text-shadow: 0px 0px 12px #cae2fd;
