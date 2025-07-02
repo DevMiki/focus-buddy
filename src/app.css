@@ -1,0 +1,27 @@
+:root {
+  --bg: white;
+  --text: black;
+}
+
+[data-theme="image"] {
+  --bg-color: transparent;
+  --text-color: white;
+  --bg-image: url('/mountain.jpg');
+}
+
+[data-theme="dark_mountain"] {
+  --bg-color: transparent;
+  --text-color: white;
+  --bg-image: url('/dark_mountain.jpg');
+}
+
+body {
+  background-color: var(--bg-color);
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center; 
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+  color: var(--text-color);
+  transition: all 0.5s ease, color 0.3s ease;
+}
