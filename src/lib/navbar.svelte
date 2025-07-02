@@ -30,7 +30,7 @@
   </div>
 </nav>
 
-<style>
+<style lang="postcss">
   nav {
     display: flex;
     justify-content: space-between;

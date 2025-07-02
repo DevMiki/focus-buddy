@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .app-container {
   /* make the container fill the viewport height */
   min-height: 100vh;
