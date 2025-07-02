@@ -1,14 +1,10 @@
 <script lang="ts">
-	import TimerActionButtonsV2 from '$lib/timer-action-buttons-v2.svelte';
-	import TimerActionButtons from '$lib/play-pause-buttons.svelte';
 	import PlayPauseButtons from '$lib/play-pause-buttons.svelte';
 	import ResetButton from '$lib/reset-button.svelte';
 
 	const MINUTE = 60 * 1000;
 	let counter_duration = $state(MINUTE * 30);
 	let isRunning = $state(false);
-
-	let timerId: number | undefined;
 	let time = $derived(new Date(counter_duration).toISOString().slice(14, 19));
 
 	$effect(() => {
@@ -43,17 +39,14 @@
 	}
 </script>
 
-<main>
-	<div class="action-buttons">
-		<PlayPauseButtons onPlay={handlePlay} onPause={handlePause} />
-		<ResetButton onReset={handleReset} />
-	</div>
+<div class="action-buttons">
+	<PlayPauseButtons onPlay={handlePlay} onPause={handlePause} />
+	<ResetButton onReset={handleReset} />
+</div>
 
-	<div class="timer">
-		<h1>{time}</h1>
-	</div>
-
-</main>
+<div class="timer">
+	<h1>{time}</h1>
+</div>
 
 <style lang="scss">
 	.flex-center {
