@@ -3,12 +3,15 @@
 	import '../app.css';
 	import type { Snippet } from 'svelte';
 
+	let DEFAULT_BACKGROUND = 'mountain.jpg';
 	let { children }: { children: Snippet } = $props();
 
-	let selectedBackground = $state('dark_mountain.jpg');
+	let selectedBackground = $state(null);
+	let activeBackground = $derived(selectedBackground ?? DEFAULT_BACKGROUND);
+
 </script>
 
-<div class="app-container" style="--bg-image: url('/{selectedBackground}')">
+<div class="app-container" style="--bg-image: url('/{activeBackground}')">
 	
 	<Navbar bind:selectedBackground />
 
