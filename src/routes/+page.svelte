@@ -2,71 +2,82 @@
 	import PlayPauseButtons from '$lib/play-pause-buttons.svelte';
 	import ResetButton from '$lib/reset-button.svelte';
 
-	const MINUTE = 60 * 1000;
-	let counter_duration = $state(MINUTE * 30);
-	let isRunning = $state(false);
-	let time = $derived(new Date(counter_duration).toISOString().slice(14, 19));
+	const MINUTE = 60; 
+	const INITIAL_DURATION_SECONDS = 30 * MINUTE;
 
-	let minutesToShow = $derived(Math.ceil(counter_duration / MINUTE));
+	let counter_seconds = $state(INITIAL_DURATION_SECONDS);
+	let isRunning = $state(false);
+
+	// No change needed here, but let's rename for clarity
+	let time_display = $derived(new Date(counter_seconds * 1000).toISOString().slice(14, 19));
+
+	// 1. THE NEW CORE DERIVED STATE: Progress from 0.0 to 1.0
+	let progress = $derived((INITIAL_DURATION_SECONDS - counter_seconds) / INITIAL_DURATION_SECONDS);
 
 	$effect(() => {
-		if (!isRunning) {
-			return;
-		}
-
+		console.log('progress', progress);
+		console.log('progress-off', progress_offset);
+		if (!isRunning) return;
 		const interval = setInterval(() => {
-			if (counter_duration > 0) {
-				counter_duration -= 1000;
+			if (counter_seconds > 0) {
+				counter_seconds--;
 			} else {
 				isRunning = false;
 			}
 		}, 1000);
-
-		return () => {
-			clearInterval(interval);
-		};
+		return () => clearInterval(interval);
 	});
 
-	function handlePlay() {
+	function onPlay() {
 		isRunning = true;
 	}
-
-	function handlePause() {
+	function onPause() {
 		isRunning = false;
 	}
-
-	function handleReset() {
-		counter_duration = MINUTE * 30;
+	function onReset() {
 		isRunning = false;
+		counter_seconds = INITIAL_DURATION_SECONDS;
 	}
+
+	// 2. SVG GEOMETRY AND ANIMATION STATE
+	const CIRCLE_RADIUS = 45; // Our circle's radius in the 100x100 viewBox
+	const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
+
+	// This is the value we will bind to our SVG
+	let progress_offset = $derived(CIRCUMFERENCE * (1 - progress));
 </script>
 
+
 <div class="clock-timer-wrapper">
-	<div class="clock-container">
-		<svg class="clock-svg" viewBox="0 0 100 100">
-			<g transform="translate(50, 50)">
-				{#each Array.from({ length: 30 }, (_, i) => i + 1) as minute}
-					<!-- Only show the line if its minute number is <= minutes left -->
-					{#if minute <= minutesToShow}
-						<line class="minute-mark" y1="-45" y2="-50" transform="rotate({minute * (360 / 30)})" />
-					{/if}
-				{/each}
-			</g>
-		</svg>
-	</div>
+	<!-- The SVG is now simpler and more declarative -->
+	<svg class="progress-ring" viewBox="0 0 100 100">
+		<!-- The background track -->
+		<circle class="progress-ring__background" r={CIRCLE_RADIUS} cx="50" cy="50" />
+		<!-- The moving progress bar -->
+		<circle
+			class="progress-ring__bar"
+			r={CIRCLE_RADIUS}
+			cx="50"
+			cy="50"
+			stroke-dasharray={CIRCUMFERENCE}
+			stroke-dashoffset="{progress_offset}"
+		/>
+	</svg>
 
 	<div class="timer">
-		<h1>{time}</h1>
+		<!-- Use the renamed state variable for clarity -->
+		<h1>{time_display}</h1>
 		<div class="action-buttons">
-			<PlayPauseButtons onPlay={handlePlay} onPause={handlePause} />
-			<ResetButton onReset={handleReset} />
+			<PlayPauseButtons {onPlay} {onPause} />
+			<ResetButton {onReset} />
 		</div>
 	</div>
 </div>
 
+
 <style lang="scss">
 	.clock-timer-wrapper {
-		margin:0 auto;
+		margin: 0 auto;
 		width: min(80vw, 80vh);
 		aspect-ratio: 1/1;
 		display: flex;
@@ -75,25 +86,30 @@
 		position: relative;
 	}
 
-	.clock-container {
-		width: 85%;
-		height: 85%;
-		position: relative;
-		display: flex;
-		justify-content: center;
-		align-items: center;
+	.progress-ring {
+		width: 100%;
+		height: 100%;
+		// Rotates the entire SVG so the drawing starts at the top (12 o'clock)
+		transform: rotate(-90deg);
 	}
 
-	.minute-mark {
-		stroke: rgba(255, 255, 255, 0.7);
-		stroke-width: 1;
-		stroke-linecap: round;
+	.progress-ring__background,
+	.progress-ring__bar {
+		fill: none; // Makes the circles hollow
+		stroke-width: 3; // Thinner lines
+		stroke-linecap: round; // Nice rounded ends
 	}
 
-	.clock-svg {
-		width: 90%;
-		height: 90%;
-		overflow: visible;
+	.progress-ring__background {
+		// A subtle track color
+		stroke: rgba(255, 255, 255, 0.15);
+	}
+
+	.progress-ring__bar {
+		// A vibrant, eye-catching color
+		stroke: #7df9ff; // Electric Blue, for example
+		// Add a transition for super smooth updates!
+		transition: stroke-dashoffset 0.3s ease-out;
 	}
 
 	.timer {
@@ -125,5 +141,4 @@
 		justify-content: flex-end;
 		gap: 0.6rem;
 	}
-
 </style>
