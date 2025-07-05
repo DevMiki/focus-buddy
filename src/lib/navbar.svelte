@@ -2,8 +2,6 @@
 	import { browser } from '$app/environment';
 	import { fade } from 'svelte/transition';
 
-	// PROPS & STATE
-	// No changes needed here, the logic was already sound.
 	let { selectedBackground = $bindable() }: { selectedBackground?: string | null } = $props();
 	let isPanelOpen = $state(false);
 
@@ -12,20 +10,13 @@
 		{ name: 'Calm Mountains', value: 'dark_mountain.jpg' },
 		{ name: 'Green Landscape', value: 'green_landscape.png' },
 		{ name: 'Mountain and Sea', value: 'mountain_and_sea.jpg' }
-		// Add more themes here if you wish
 	];
 
-	// This is the reference to our main dropdown wrapper div.
-	// We'll use it to detect clicks outside the component.
 	let dropdownWrapper: HTMLDivElement;
 
-	// THE "CLICK OUTSIDE" EFFECT
 	// This effect runs only in the browser and only when the panel is open.
-	// It adds a global click listener to close the panel, and crucially,
-	// cleans up after itself to prevent memory leaks.
 	$effect(() => {
 		if (!browser || !isPanelOpen) return;
-
 		const handleClickOutside = (event: MouseEvent) => {
 			if (dropdownWrapper && !dropdownWrapper.contains(event.target as Node)) {
 				isPanelOpen = false;
@@ -44,7 +35,7 @@
 
 <nav>
 	<!-- Main nav links -->
-	<a href="/" class="brand"> 🍅 Pomodoro </a>
+	<a href="/" class="brand"> 🧘🏽Focus Buddy  </a>
 	<ul>
 		<li>
 			<a href="/">Timer</a>
