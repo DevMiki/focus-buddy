@@ -39,17 +39,14 @@
 		counter_seconds = INITIAL_DURATION_SECONDS;
 	}
 
-	// 2. SVG GEOMETRY AND ANIMATION STATE
 	const CIRCLE_RADIUS = 45; // Our circle's radius in the 100x100 viewBox
 	const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
 
-	// This is the value we will bind to our SVG
 	let progress_offset = $derived(CIRCUMFERENCE * (1 - progress));
 </script>
 
 
 <div class="clock-timer-wrapper">
-	<!-- The SVG is now simpler and more declarative -->
 	<svg class="progress-ring" viewBox="0 0 100 100">
 		<!-- The background track -->
 		<circle class="progress-ring__background" r={CIRCLE_RADIUS} cx="50" cy="50" />
@@ -65,7 +62,6 @@
 	</svg>
 
 	<div class="timer">
-		<!-- Use the renamed state variable for clarity -->
 		<h1>{time_display}</h1>
 		<div class="action-buttons">
 			<PlayPauseButtons {onPlay} {onPause} />
@@ -96,18 +92,16 @@
 	.progress-ring__background,
 	.progress-ring__bar {
 		fill: none; // Makes the circles hollow
-		stroke-width: 3; // Thinner lines
+		stroke-width: 3;  
 		stroke-linecap: round; // Nice rounded ends
 	}
 
 	.progress-ring__background {
-		// A subtle track color
 		stroke: rgba(255, 255, 255, 0.15);
 	}
 
 	.progress-ring__bar {
-		// A vibrant, eye-catching color
-		stroke: #7df9ff; // Electric Blue, for example
+		stroke: #7df9ff; 
 		// Add a transition for super smooth updates!
 		transition: stroke-dashoffset 0.3s ease-out;
 	}
