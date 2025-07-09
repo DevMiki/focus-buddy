@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { fade } from 'svelte/transition';
+	import type { Theme } from './types/database';
 
-	let { selectedBackground = $bindable() }: { selectedBackground?: string | null } = $props();
+	let {
+		selectedBackground = $bindable(),
+		themes = []
+	}: {
+		selectedBackground?: string | null;
+		themes: Theme[];
+	} = $props();
 	let isPanelOpen = $state(false);
-
-	const backgroundOptions: { name: string; value: string }[] = [
-		{ name: 'Vivid Mountains', value: 'mountain.jpg' },
-		{ name: 'Calm Mountains', value: 'dark_mountain.jpg' },
-		{ name: 'Green Landscape', value: 'green_landscape.png' },
-		{ name: 'Mountain and Sea', value: 'mountain_and_sea.jpg' }
-	];
 
 	let dropdownWrapper: HTMLDivElement;
 
@@ -35,7 +35,7 @@
 
 <nav>
 	<!-- Main nav links -->
-	<a href="/" class="brand"> 🧘🏽Focus Buddy  </a>
+	<a href="/" class="brand"> 🧘🏽Focus Buddy </a>
 	<ul>
 		<li>
 			<a href="/">Timer</a>
@@ -58,7 +58,12 @@
 		>
 			<span>🎨 Theme</span>
 			<!-- An inline SVG for the chevron icon. It's clean and can be styled with CSS. -->
-			<svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+			<svg
+				class="chevron"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 20 20"
+				fill="currentColor"
+			>
 				<path
 					fill-rule="evenodd"
 					d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -71,7 +76,7 @@
 		{#if isPanelOpen}
 			<div class="dropdown-panel" transition:fade={{ duration: 150 }}>
 				<ul class="theme-options-list">
-					{#each backgroundOptions as background}
+					{#each themes as background}
 						<li>
 							<button
 								class="option-button"

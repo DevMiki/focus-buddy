@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:17.5-alpine
+    container_name: ${POSTGRES_CONTAINER_NAME:-study_tracker_db}
+    restart: unless-stopped
+    environment: 
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-study_tracker_db}
+    ports:
+      - '5433:5432'
+    volumes:
+      - study_tracker_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  study_tracker_data:
+
+networks:
+  backend:
