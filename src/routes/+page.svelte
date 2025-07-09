@@ -15,8 +15,6 @@
 	let progress = $derived((INITIAL_DURATION_SECONDS - counter_seconds) / INITIAL_DURATION_SECONDS);
 
 	$effect(() => {
-		console.log('progress', progress);
-		console.log('progress-off', progress_offset);
 		if (!isRunning) return;
 		const interval = setInterval(() => {
 			if (counter_seconds > 0) {
@@ -64,8 +62,8 @@
 	<div class="timer">
 		<h1>{time_display}</h1>
 		<div class="action-buttons">
-			<PlayPauseButtons {onPlay} {onPause} />
-			<ResetButton {onReset} />
+			<PlayPauseButtons {isRunning} {onPlay} {onPause} />
+			<ResetButton {onReset}/>
 		</div>
 	</div>
 </div>

@@ -1,33 +1,53 @@
 <script lang="ts">
-	let { onPlay, onPause } = $props<{ onPlay: () => void; onPause: () => void }>();
+	let { onPlay, onPause, isRunning } = $props<{
+		onPlay: () => void;
+		onPause: () => void;
+		isRunning: boolean;
+	}>();
+
+	let checkbox: HTMLInputElement;
 
 	function handleToggle(event: Event) {
-		const checkbox = event.currentTarget as HTMLInputElement;
 		if (checkbox.checked) {
 			onPlay();
 		} else {
 			onPause();
 		}
 	}
+
+	$effect(() => {
+		if (isRunning) {
+			checkbox.checked = true;
+		} else {
+			checkbox.checked = false;
+		}
+	});
 </script>
 
 <div class="scale-wrapper">
-  <div class="toggle-cont">
-    <input onchange={handleToggle} class="toggle-input" id="toggle" name="toggle" type="checkbox" />
-    <label class="toggle-label" for="toggle">
-      <div class="cont-label-play">
-        <span class="label-play"></span>
-      </div>
-    </label>
-  </div>
+	<div class="toggle-cont">
+		<input
+			bind:this={checkbox}
+			onchange={handleToggle}
+			class="toggle-input"
+			id="toggle"
+			name="toggle"
+			type="checkbox"
+		/>
+		<label class="toggle-label" for="toggle">
+			<div class="cont-label-play">
+				<span class="label-play"></span>
+			</div>
+		</label>
+	</div>
 </div>
 
 <style>
-  .scale-wrapper {
-    transform: scale(0.70);
-    transform-origin:center;
-    display:inline-block;
-  }
+	.scale-wrapper {
+		transform: scale(0.7);
+		transform-origin: center;
+		display: inline-block;
+	}
 
 	.toggle-cont {
 		width: 100px;
