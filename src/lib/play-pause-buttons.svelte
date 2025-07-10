@@ -4,31 +4,13 @@
 		onPause: () => void;
 		isRunning: boolean;
 	}>();
-
-	let checkbox: HTMLInputElement;
-
-	function handleToggle(event: Event) {
-		if (checkbox.checked) {
-			onPlay();
-		} else {
-			onPause();
-		}
-	}
-
-	$effect(() => {
-		if (isRunning) {
-			checkbox.checked = true;
-		} else {
-			checkbox.checked = false;
-		}
-	});
 </script>
 
 <div class="scale-wrapper">
 	<div class="toggle-cont">
 		<input
-			bind:this={checkbox}
-			onchange={handleToggle}
+			checked={isRunning}
+			onchange={() => isRunning? onPause() : onPlay()}
 			class="toggle-input"
 			id="toggle"
 			name="toggle"
