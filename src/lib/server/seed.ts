@@ -2,10 +2,10 @@ import { db } from "./db";
 
 
 const backgroundOptions = [
-    { name: 'Vivid Mountains', value: 'mountain.jpg' },
-    { name: 'Calm Mountains', value: 'dark_mountain.jpg' },
-    { name: 'Green Landscape', value: 'green_landscape.png' },
-    { name: 'Mountain and Sea', value: 'mountain_and_sea.jpg' }
+    { name: 'Vivid Mountains', image_url: 'mountain.jpg', primary_color: '#7df9ff', secondary_color: '#f43f5e' },
+    { name: 'Calm Mountains', image_url: 'dark_mountain.jpg', primary_color: '#7df9ff', secondary_color: '#f43f5e' },
+    { name: 'Green Landscape', image_url: 'green_landscape.png', primary_color: '#7df9ff', secondary_color: '#f43f5e' },
+    { name: 'Mountain and Sea', image_url: 'mountain_and_sea.jpg', primary_color: '#7df9ff', secondary_color: '#f43f5e' }
 ];
 
 async function seed() {
@@ -17,7 +17,9 @@ async function seed() {
         await trx.schema.createTable('themes').ifNotExists()
         .addColumn('id', 'serial', (col) => col.primaryKey())
         .addColumn('name', 'varchar(255)', (col) => col.notNull().unique())
-        .addColumn('value', 'varchar(255)', (col) => col.notNull().unique())
+        .addColumn('image_url', 'varchar(255)', (col) => col.notNull().unique())
+        .addColumn('primary_color', 'varchar(255)', (col) => col.notNull())
+        .addColumn('secondary_color', 'varchar(255)', (col) => col.notNull())
         .execute();
 
         await trx.insertInto('themes').values(backgroundOptions).execute();

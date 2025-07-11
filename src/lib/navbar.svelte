@@ -4,14 +4,13 @@
 	import type { Theme } from './types/database';
 
 	let {
-		selectedBackground = $bindable(),
+		activeTheme = $bindable(),
 		themes = []
 	}: {
-		selectedBackground?: string | null;
+		activeTheme?: Theme | null;
 		themes: Theme[];
 	} = $props();
 	let isPanelOpen = $state(false);
-
 	let dropdownWrapper: HTMLDivElement;
 
 	// This effect runs only in the browser and only when the panel is open.
@@ -76,19 +75,18 @@
 		{#if isPanelOpen}
 			<div class="dropdown-panel" transition:fade={{ duration: 150 }}>
 				<ul class="theme-options-list">
-					{#each themes as background}
+					{#each themes as theme}
 						<li>
 							<button
 								class="option-button"
-								class:active={selectedBackground === background.value}
 								onclick={() => {
-									selectedBackground = background.value;
+									activeTheme = theme;
 									isPanelOpen = false;
 								}}
 							>
 								<!-- The text and the indicator are now properly separated for styling -->
-								<span class="option-text">{background.name}</span>
-								{#if selectedBackground === background.value}
+								<span class="option-text">{theme.name}</span>
+								{#if activeTheme?.image_url === theme.image_url}
 									<span class="active-indicator"></span>
 								{/if}
 							</button>
@@ -142,7 +140,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between; /* Pushes text left, icon right */
-		width: 160px; /* A fixed width for consistency */
+		width: 10.5rem; /* A fixed width for consistency */
 		padding: 0.5rem 0.75rem;
 		border-radius: 6px;
 		border: 1px solid #555;
@@ -218,14 +216,9 @@
 		background-color: rgba(255, 255, 255, 0.1);
 	}
 
-	/* Style for the currently active option */
-	.option-button.active {
-		color: white;
-		font-weight: 600;
-	}
-
 	/* The little dot indicator */
 	.active-indicator {
+		margin-left:5px;
 		display: inline-block;
 		width: 8px;
 		height: 8px;

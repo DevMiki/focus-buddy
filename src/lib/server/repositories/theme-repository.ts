@@ -1,4 +1,4 @@
-import type { NewTheme, ThemeUpdate } from "$lib/types/database"
+import type { NewTheme, Theme, ThemeUpdate } from "$lib/types/database"
 import { db } from "../db"
 
 export async function findThemeById(id: number) {
@@ -8,7 +8,7 @@ export async function findThemeById(id: number) {
     .executeTakeFirst()
 }
 
-export async function findAllThemes(){
+export async function findAllThemes(): Promise<Theme[]> {
     return await db.selectFrom('themes')
     .selectAll()
     .orderBy('name', 'asc')

@@ -4,15 +4,22 @@
 	import '../app.css';
 	import type { Snippet } from 'svelte';
 
-	let DEFAULT_BACKGROUND = 'mountain.jpg';
-	let { data, children }: { children: Snippet, data: {themes: Theme[]} } = $props();
-	let selectedBackground = $state(null);
-	let activeBackground = $derived(selectedBackground ?? DEFAULT_BACKGROUND);
+	let { data, children }: { children: Snippet; data: { themes: Theme[] } } = $props();
+	let DEFAULT_THEME =
+		data.themes.find((theme) => theme.image_url === 'mountain.jpg') ?? data.themes[0];
+	let activeTheme = $derived(DEFAULT_THEME);
+	let activeBackgroundImage = $derived(activeTheme?.image_url);
 </script>
 
-<div class="app-container" style="--bg-image: url('/{activeBackground}')">
-	
-	<Navbar bind:selectedBackground themes={data.themes} />
+<div
+	class="app-container"
+	style="
+		--bg-image: url('/{activeBackgroundImage}');
+		--color-primary: {activeTheme.primary_color};
+		--color-secondary: {activeTheme.secondary_color};
+	"
+>
+	<Navbar bind:activeTheme themes={data.themes} />
 
 	<main class="page-content">
 		{@render children()}

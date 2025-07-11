@@ -35,7 +35,7 @@
 		width: 100px;
 		height: 50px;
 		border-radius: 9999px;
-		height: fit-content; /* ✅ container adapts to content height + shadows */
+		height: fit-content;
 	}
 
 	.toggle-cont .toggle-input {
@@ -43,6 +43,8 @@
 	}
 
 	.toggle-cont .toggle-label {
+		--primary-color: var(--color-primary);
+		--secondary-color: var(--color-secondary);
 		cursor: pointer;
 		position: relative;
 		display: inline-block;
@@ -59,13 +61,13 @@
 		position: relative;
 		width: 50px;
 		aspect-ratio: 1 / 1;
-		background: #5e5e5e;
+		background: var(--primary-color);
 		border-radius: 9999px;
 		transition: all 0.5s cubic-bezier(1, 0, 0, 1);
 	}
 
 	.toggle-cont .toggle-input:checked + .toggle-label .cont-label-play {
-		background: #f43f5e;
+		background: #7ea9b3;
 		transform: translateX(50px);
 	}
 
