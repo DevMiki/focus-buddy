@@ -2,10 +2,12 @@
 	import PlayPauseButtons from '$lib/play-pause-buttons.svelte';
 	import ResetButton from '$lib/reset-button.svelte';
 
-	const MINUTE = 60; 
-	const INITIAL_DURATION_SECONDS = 30 * MINUTE;
+	const SECONDS_IN_MINUTE = 60; 
+	const MINUTES_TO_STUDY = 25;
+	const INITIAL_DURATION_SECONDS = MINUTES_TO_STUDY * SECONDS_IN_MINUTE;
 
 	let counter_seconds = $state(INITIAL_DURATION_SECONDS);
+	let pause_counter_seconds = $state(0);
 	let isRunning = $state(false);
 
 	// No change needed here, but let's rename for clarity
@@ -20,7 +22,7 @@
 			if (counter_seconds > 0) {
 				counter_seconds--;
 			} else {
-				isRunning = false;
+				onReset();
 			}
 		}, 1000);
 		return () => clearInterval(interval);
@@ -31,6 +33,7 @@
 	}
 	function onPause() {
 		isRunning = false;
+		
 	}
 	function onReset() {
 		isRunning = false;
@@ -60,6 +63,7 @@
 	</svg>
 
 	<div class="timer">
+		<p>{pause_counter_seconds}</p>
 		<h1>{time_display}</h1>
 		<div class="action-buttons">
 			<PlayPauseButtons {isRunning} {onPlay} {onPause} />

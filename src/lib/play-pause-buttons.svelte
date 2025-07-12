@@ -67,7 +67,7 @@
 	}
 
 	.toggle-cont .toggle-input:checked + .toggle-label .cont-label-play {
-		background: #7ea9b3;
+		background: var(--secondary-color);
 		transform: translateX(50px);
 	}
 

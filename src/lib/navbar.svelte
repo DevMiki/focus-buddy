@@ -41,7 +41,7 @@
 		</li>
 		<li>
 			<!-- We'll create this page next -->
-			<a href="/about">About</a>
+			<a href="/insights">Insights</a>
 		</li>
 	</ul>
 
