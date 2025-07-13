@@ -1,51 +1,30 @@
 <script lang="ts">
 	import PlayPauseButtons from '$lib/play-pause-buttons.svelte';
 	import ResetButton from '$lib/reset-button.svelte';
+	import { createTimer } from '$lib/services/timer.svelte';
 
-	const SECONDS_IN_MINUTE = 60; 
-	const MINUTES_TO_STUDY = 25;
-	const INITIAL_DURATION_SECONDS = MINUTES_TO_STUDY * SECONDS_IN_MINUTE;
+	const timer = createTimer();
 
-	let counter_seconds = $state(INITIAL_DURATION_SECONDS);
-	let pause_counter_seconds = $state(0);
-	let isRunning = $state(false);
+	const INITIAL_DURATION_SECONDS = 25 * 60;
+	let isRunning = $derived(timer.mode === 'studying');
 
 	// No change needed here, but let's rename for clarity
-	let time_display = $derived(new Date(counter_seconds * 1000).toISOString().slice(14, 19));
-
+	let time_display = $derived(
+		new Date(timer.remainingStudySeconds * 1000).toISOString().slice(14, 19)
+	);
+	let pause_time_display = $derived(
+		new Date(timer.pauseSeconds * 1000).toISOString().slice(14, 19)
+	);
 	// 1. THE NEW CORE DERIVED STATE: Progress from 0.0 to 1.0
-	let progress = $derived((INITIAL_DURATION_SECONDS - counter_seconds) / INITIAL_DURATION_SECONDS);
-
-	$effect(() => {
-		if (!isRunning) return;
-		const interval = setInterval(() => {
-			if (counter_seconds > 0) {
-				counter_seconds--;
-			} else {
-				onReset();
-			}
-		}, 1000);
-		return () => clearInterval(interval);
-	});
-
-	function onPlay() {
-		isRunning = true;
-	}
-	function onPause() {
-		isRunning = false;
-		
-	}
-	function onReset() {
-		isRunning = false;
-		counter_seconds = INITIAL_DURATION_SECONDS;
-	}
+	let progress = $derived(
+		(INITIAL_DURATION_SECONDS - timer.remainingStudySeconds) / INITIAL_DURATION_SECONDS
+	);
 
 	const CIRCLE_RADIUS = 45; // Our circle's radius in the 100x100 viewBox
 	const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
 
 	let progress_offset = $derived(CIRCUMFERENCE * (1 - progress));
 </script>
-
 
 <div class="clock-timer-wrapper">
 	<svg class="progress-ring" viewBox="0 0 100 100">
@@ -58,20 +37,22 @@
 			cx="50"
 			cy="50"
 			stroke-dasharray={CIRCUMFERENCE}
-			stroke-dashoffset="{progress_offset}"
+			stroke-dashoffset={progress_offset}
 		/>
 	</svg>
 
 	<div class="timer">
-		<p>{pause_counter_seconds}</p>
+		<div class="pause-timer inline-flex items-center relative">
+			<p>{pause_time_display}</p>
+			<span class="absolute left-9 ml-2">💤</span>
+		</div>
 		<h1>{time_display}</h1>
 		<div class="action-buttons">
-			<PlayPauseButtons {isRunning} {onPlay} {onPause} />
-			<ResetButton {onReset}/>
+			<PlayPauseButtons {isRunning} onPlay={timer.play} onPause={timer.pause} />
+			<ResetButton onReset={timer.reset} />
 		</div>
 	</div>
 </div>
-
 
 <style lang="scss">
 	.clock-timer-wrapper {
@@ -94,7 +75,7 @@
 	.progress-ring__background,
 	.progress-ring__bar {
 		fill: none; // Makes the circles hollow
-		stroke-width: 3;  
+		stroke-width: 3;
 		stroke-linecap: round; // Nice rounded ends
 	}
 
@@ -103,9 +84,15 @@
 	}
 
 	.progress-ring__bar {
-		stroke: #7df9ff; 
+		stroke: #7df9ff;
 		// Add a transition for super smooth updates!
 		transition: stroke-dashoffset 0.3s ease-out;
+	}
+	.pause-timer {
+		font-size: 1rem;
+		font-weight: 600;
+		color: #fff;
+		text-shadow: 0px 0px 12px #cae2fd;
 	}
 
 	.timer {

@@ -6,7 +6,7 @@
 
 	let { data, children }: { children: Snippet; data: { themes: Theme[] } } = $props();
 	let DEFAULT_THEME =
-		data.themes.find((theme) => theme.image_url === 'mountain.jpg') ?? data.themes[0];
+		data.themes.find((theme) => theme.image_url === 'dark_mountain.jpg') ?? data.themes[0];
 	let activeTheme = $derived(DEFAULT_THEME);
 	let activeBackgroundImage = $derived(activeTheme?.image_url);
 </script>
