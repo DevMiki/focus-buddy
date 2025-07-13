@@ -1,6 +1,6 @@
 <script lang="ts">
-	import PlayPauseButtons from '$lib/play-pause-buttons.svelte';
-	import ResetButton from '$lib/reset-button.svelte';
+	import PlayPauseButtons from '$lib/components/PlayPauseButtons.svelte';
+	import ResetButton from '$lib/components/ResetButton.svelte';
 	import { createTimer } from '$lib/services/timer.svelte';
 
 	const timer = createTimer();

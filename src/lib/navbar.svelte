@@ -127,7 +127,6 @@
 		text-decoration: underline;
 	}
 
-	/* === Custom Dropdown Styles (Refactored) === */
 
 	/* The main container for positioning */
 	.background-selector {

@@ -1,3 +1,5 @@
+import { toasts } from "./toasts.svelte";
+
 const SECONDS_IN_MINUTE = 60;
 const MINUTES_TO_STUDY = 25;
 const INITIAL_DURATION_SECONDS = MINUTES_TO_STUDY * SECONDS_IN_MINUTE;
@@ -28,21 +30,38 @@ export function createTimer() {
     })
 
     function play() {
+        toasts.addToast({
+            type: 'success',
+            message: 'Study session started!',
+            duration: 2500
+        });
         mode = 'studying';
     }
 
     function pause() {
-		mode = 'paused';
-	}
+        mode = 'paused';
+        toasts.addToast({
+            type: 'success',
+            message: 'Study session paused!',
+            duration: 2500
+        })
+    }
 
     function reset() {
-        mode = 'idle';
         remainingStudySeconds = INITIAL_DURATION_SECONDS;
         pauseSeconds = 0;
+        if (mode === 'paused' || mode === 'studying') {
+            toasts.addToast({
+                type: 'warning',
+                message: 'Study session reset!',
+                duration: 2500
+            })
+        }
+        mode = 'idle';
     }
 
     return {
-        get mode() {return mode; },
+        get mode() { return mode; },
         get remainingStudySeconds() { return remainingStudySeconds; },
         get pauseSeconds() { return pauseSeconds; },
         play,

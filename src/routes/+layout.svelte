@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Navbar from '$lib/navbar.svelte';
+	import ToastContainer from '$lib/components/ToastContainer.svelte';
+import Navbar from '$lib/Navbar.svelte';
 	import type { Theme } from '$lib/types/database';
 	import '../app.css';
 	import type { Snippet } from 'svelte';
@@ -11,6 +12,7 @@
 	let activeBackgroundImage = $derived(activeTheme?.image_url);
 </script>
 
+<ToastContainer />
 <div
 	class="app-container"
 	style="
