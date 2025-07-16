@@ -13,7 +13,7 @@ const { subscribe, update } = writable<ToastMessage[]>([]);
 
 function addToast(toastMessageInput: ToastMessageInput) {
 
-    const id = Math.random().toString(36).substring(2, 9);
+    const id = crypto.randomUUID();
 
     update((allToasts) => [{ id, ...toastMessageInput }, ...allToasts])
 
