@@ -15,6 +15,7 @@ export async function saveSession(session: StudySession) {
             end_time: session.endTime,
             total_study_time: session.totalStudyTime,
             total_pause_time: session.totalPauseTime,
+            total_pauses: session.totalPauses,
             focus_score: session.focusScore
         };
 

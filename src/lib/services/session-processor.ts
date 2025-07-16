@@ -58,7 +58,7 @@ export function processSession(events: SessionEvent[], plannedDuration: number):
             segment.endTime = segmentEndTime;
             segments.push(segment);
             studySession.totalPauseTime += duration;
-            studySession.totalPauses++;
+            studySession.totalPauses += 1;
         }
         else {
             segment.type = 'end';

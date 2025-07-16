@@ -18,6 +18,7 @@ export interface StudySessionsTable {
     end_time: number;
     total_study_time: number;
     total_pause_time: number;
+    total_pauses: number;
     focus_score: number; 
     created_at: ColumnType<string, string | undefined, never>;
 }

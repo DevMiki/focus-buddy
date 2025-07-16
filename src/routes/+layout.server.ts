@@ -8,11 +8,9 @@ import type { LayoutServerLoad } from "./$types";
  * @returns An object containing the list of themes
  */
 export const load: LayoutServerLoad = async () => {
-    console.log('Layout server load function running...');
 
     const themes = await findAllThemes();
 
-    console.log('Layout server load function finished!');
     return {
         themes: themes
     }
