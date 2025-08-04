@@ -31,12 +31,33 @@ export interface SessionSegmentsTable {
     end_time: number;
 }
 
+//Lucia Auth Tables
+export interface AuthUserTable {
+    id: Generated<number>;
+    username: string;
+}
+
+export interface AuthSessionTable {
+    id: Generated<number>;
+    expires_at: number;
+    user_id: number;
+}
+
+export interface AuthKeyTable {
+    id: Generated<number>;
+    user_id: number;
+    hashed_password: string;
+}
+
 // --- MASTER DATABASE INTERFACE ---
 // This is the single source of truth for Kysely.
 export interface Database {
     themes: ThemesTable;
     study_sessions: StudySessionsTable;
     session_segments: SessionSegmentsTable;
+    auth_user: AuthUserTable;
+    auth_session: AuthSessionTable;
+    auth_key: AuthKeyTable;
 }
 
 
@@ -57,3 +78,16 @@ export type StudySessionUpdate = Updateable<StudySessionsTable>;
 export type SessionSegment = Selectable<SessionSegmentsTable>;
 export type NewSessionSegment = Insertable<SessionSegmentsTable>;
 export type SessionSegmentUpdate = Updateable<SessionSegmentsTable>;
+
+// Lucia Auth
+export type AuthUser = Selectable<AuthUserTable>;
+export type NewAuthUser = Insertable<AuthUserTable>;
+export type AuthUserUpdate = Updateable<AuthUserTable>;
+
+export type AuthSession = Selectable<AuthSessionTable>;
+export type NewAuthSession = Insertable<AuthSessionTable>;
+export type AuthSessionUpdate = Updateable<AuthSessionTable>;
+
+export type AuthKey = Selectable<AuthKeyTable>;
+export type NewAuthKey = Insertable<AuthKeyTable>;
+export type AuthKeyUpdate = Updateable<AuthKeyTable>;
