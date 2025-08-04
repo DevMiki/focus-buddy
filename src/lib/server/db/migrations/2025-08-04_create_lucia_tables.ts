@@ -15,27 +15,28 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("expires_at", "integer", col => col.notNull())
         .addColumn("user_id", "integer", col => col.notNull())
         .addForeignKeyConstraint(
-            "session_user_fk", 
-            ["user_id"], 
-            "auth_user", 
-            ["id"], 
+            "session_user_fk",
+            ["user_id"],
+            "auth_user",
+            ["id"],
             fk => fk.onDelete("cascade")
         )
         .execute();
 
     await db.schema
-    .createTable("auth_key")
-    .ifNotExists()
-    .addColumn("id", "integer", col => col.primaryKey().notNull())
-    .addColumn("hashed_password", "text")
-    .addColumn("user_id", "integer", col => col.notNull())
-    .addForeignKeyConstraint(
-        "key_user_fk",
-        ["user_id"],
-        "auth_user",
-        ["id"],
-        fk => fk.onDelete("cascade")
-    )
+        .createTable("auth_key")
+        .ifNotExists()
+        .addColumn("id", "integer", col => col.primaryKey().notNull())
+        .addColumn("hashed_password", "text")
+        .addColumn("user_id", "integer", col => col.notNull())
+        .addForeignKeyConstraint(
+            "key_user_fk",
+            ["user_id"],
+            "auth_user",
+            ["id"],
+            fk => fk.onDelete("cascade")
+        )
+        .execute();
 }
 
 
