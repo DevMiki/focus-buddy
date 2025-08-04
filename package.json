@@ -42,8 +42,10 @@
 		"vite-node": "^3.2.4"
 	},
 	"dependencies": {
+		"@lucia-auth/adapter-postgresql": "^3.1.2",
 		"kysely": "^0.28.2",
 		"node-vibrant": "^4.0.3",
+		"oslo": "^1.2.1",
 		"pg": "^8.16.3"
 	}
 }
