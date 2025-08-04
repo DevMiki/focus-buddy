@@ -10,5 +10,6 @@
             "database": "study_tracker_db",
             "username": "postgres"
         }
-    ]
+    ],
+    "codium.codeCompletion.enable": true
 }

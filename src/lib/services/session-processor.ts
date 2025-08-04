@@ -12,7 +12,6 @@ export function processSession(events: SessionEvent[], plannedDuration: number):
         return;
     }
     
-    console.log('Processing session with events:', events);
     const studySession: StudySession = {
         id: 0,
         plannedDuration: 0,
@@ -60,16 +59,15 @@ export function processSession(events: SessionEvent[], plannedDuration: number):
             studySession.totalPauseTime += duration;
             studySession.totalPauses += 1;
         }
-        else {
-            segment.type = 'end';
-            segment.startTime = segmentStartTime;
-            segment.endTime = segmentEndTime;
-            segments.push(segment);
+        else if (segment.type == 'end'){
+            let lastSegmentAdded = segments.length - 1
+            segments[lastSegmentAdded].endTime = segmentEndTime;
             studySession.endTime = segmentEndTime;
         }
     }
     studySession.segments = segments;
     studySession.focusScore = studySession.totalStudyTime / (studySession.totalStudyTime + studySession.totalPauseTime) * 100 - 2.5 * studySession.totalPauses;
 
+    console.log('Going to return session with events:', events);
     return studySession;
 }

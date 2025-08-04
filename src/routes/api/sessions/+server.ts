@@ -16,7 +16,7 @@ export const POST: RequestHandler = async ({ request }) => {
         if (!sessionToSave) {
             throw error(400, 'Failed to process session data');
         }
-        saveSession(sessionToSave);
+        await saveSession(sessionToSave);
         
         return json({ message: 'Session saved successfully' }, { status: 201 });
     } catch (error: any) {

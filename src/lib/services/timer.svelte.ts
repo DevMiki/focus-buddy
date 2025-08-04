@@ -1,5 +1,4 @@
 import type { SessionEvent } from "$lib/types/session";
-import { processSession } from "./session-processor";
 import { toasts } from "./toasts.svelte";
 
 const SECONDS_IN_MINUTE = 60;
@@ -11,7 +10,7 @@ export function createTimer() {
     let mode = $state<'studying' | 'paused' | 'idle'>('idle');
     let remainingStudySeconds = $state<number>(INITIAL_DURATION_SECONDS);
     let pauseSeconds = $state<number>(0);
-    let events = $state<SessionEvent[]>([]);
+    let sessionEvents = $state<SessionEvent[]>([]);
     let isSessionActive = $state<boolean>(false);
 
     $effect(() => {
@@ -47,6 +46,7 @@ export function createTimer() {
                 }),
             });
 
+
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error('Error saving session:', errorData);
@@ -71,11 +71,11 @@ export function createTimer() {
         mode = 'studying';
 
         if (!isSessionActive) {
-            events.push({ timestamp: Date.now(), type: 'start' } as SessionEvent)
+            sessionEvents.push({ timestamp: Date.now(), type: 'start' } as SessionEvent)
             isSessionActive = true;
         }
         isSessionActive = true;
-        events.push({ timestamp: Date.now(), type: 'resume' } as SessionEvent)
+        sessionEvents.push({ timestamp: Date.now(), type: 'resume' } as SessionEvent)
     }
 
     function pause() {
@@ -87,7 +87,7 @@ export function createTimer() {
         })
 
         if (isSessionActive) {
-            events.push({ timestamp: Date.now(), type: 'pause' } as SessionEvent);
+            sessionEvents.push({ timestamp: Date.now(), type: 'pause' } as SessionEvent);
         }
     }
 
@@ -104,12 +104,12 @@ export function createTimer() {
         mode = 'idle';
 
         if (isSessionActive) {
-            events.push({ timestamp: Date.now(), type: 'end' } as SessionEvent);
+            sessionEvents.push({ timestamp: Date.now(), type: 'end' } as SessionEvent);
             isSessionActive = false;
         }
-        saveSessionToServer(events);
+        saveSessionToServer(sessionEvents);
         isSessionActive = false;
-        events = [];
+        sessionEvents = [];
     }
 
     return {

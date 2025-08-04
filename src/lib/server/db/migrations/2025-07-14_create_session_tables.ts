@@ -9,10 +9,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('planned_duration', 'integer', col => col.notNull().defaultTo(0))
     .addColumn('start_time', 'bigint', col => col.notNull())
     .addColumn('end_time', 'bigint', col => col.notNull())
-    .addColumn('total_study_time', 'integer', col => col.notNull().defaultTo(0))
-    .addColumn('total_pause_time', 'integer', col => col.notNull().defaultTo(0))
+    .addColumn('total_study_time', 'bigint', col => col.notNull().defaultTo(0))
+    .addColumn('total_pause_time', 'bigint', col => col.notNull().defaultTo(0))
     .addColumn('total_pauses', 'integer', col => col.notNull().defaultTo(0))
-    .addColumn('focus_score', 'integer', col => col.notNull().defaultTo(0))
+    .addColumn('focus_score', 'bigint', col => col.notNull().defaultTo(0))
     .addColumn('created_at', 'text', col => col.notNull().defaultTo(sql`now()::text`))
     .execute();
 

@@ -1,0 +1,67 @@
+node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Ignore build and output directories
+.build/
+.svelte-kit/
+dist/
+build/
+output/
+
+# Ignore dependencies
+node_modules/
+
+# Ignore environment and config files
+.env
+.env.*
+*.local
+
+# Ignore lock files (not needed for AI context)
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Ignore test files and test output
+tests/
+*.spec.js
+*.spec.ts
+*.test.js
+*.test.ts
+coverage/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Ignore TypeScript build output (if any)
+*.tsbuildinfo
+
+# Ignore Vite cache (used by SvelteKit)
+.vite/
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+*.code-workspace

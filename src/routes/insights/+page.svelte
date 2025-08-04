@@ -1,4 +1,5 @@
 <script lang="ts">
+	import SessionDetail from '$lib/components/SessionDetail.svelte';
 	import SessionTable from '$lib/components/SessionTable.svelte';
 
 	let { data } = $props();
@@ -14,18 +15,18 @@
 		if (selectedSessionId === sessionId) {
 			selectedSessionId = null;
 		} else {
-      selectedSessionId = sessionId;
-    }
+			selectedSessionId = sessionId;
+		}
 	}
 </script>
 
 <div class="insights-page">
 	<div class="insights-header flex flex-col gap-4 text-center">
-    <h1>Your Study Insights</h1>
-	<p>
-		Review your past sessions to understand your focus patterns. Click a session to see details.
-	</p>
-  </div>
+		<h1>Your Study Insights</h1>
+		<p>
+			Review your past sessions to understand your focus patterns. Click a session to see details.
+		</p>
+	</div>
 
 	<div class="table-wrapper">
 		<SessionTable sessions={data.sessions} onSessionSelect={handleSessionSelect} />
@@ -34,13 +35,14 @@
 	{#if selectedSession}
 		<div class="detail-wrapper">
 			<h2>Details for session on {new Date(selectedSession.createdAt).toLocaleDateString()}</h2>
+			<SessionDetail session={selectedSession} />
 		</div>
 	{/if}
 </div>
 
 <style>
 	.insights-page {
-    margin: 0 2rem;
+		margin: 0 2rem;
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;
@@ -49,7 +51,12 @@
 		font-size: 2.5rem;
 		font-weight: bold;
 	}
+	h2 {
+		text-shadow:
+			0 0 0.5px rgba(255, 255, 255, 0.331),
+			0 0.5px 0.5px rgba(57, 57, 57, 0.7);
+	}
 	p {
-		color: #ccc;
+		color: #eee;
 	}
 </style>
