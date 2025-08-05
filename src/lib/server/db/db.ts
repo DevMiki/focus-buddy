@@ -1,8 +1,6 @@
-import { Kysely } from "kysely";
 import type { Database } from "$lib/types/database";
-import { PostgresDialect } from "kysely";
+import { Kysely, PostgresDialect } from "kysely";
 import { Pool } from "pg";
-import { NodePostgresAdapter } from "@lucia-auth/adapter-postgresql";
 
 const studyTrackerPool = new Pool({
             database: 'study_tracker_db',
@@ -18,8 +16,3 @@ export const db = new Kysely<Database>({
         pool: studyTrackerPool
     })
 })
-
-const adapter = new NodePostgresAdapter(studyTrackerPool, {
-    user: "auth_user",
-    session: "auth_session"
-});

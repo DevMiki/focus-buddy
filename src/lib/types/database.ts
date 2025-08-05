@@ -38,8 +38,10 @@ export interface AuthUserTable {
 }
 
 export interface AuthSessionTable {
-    id: Generated<number>;
+    id: string;
+    created_at: Date;
     expires_at: Date;
+    secret_hash: Uint8Array;
     user_id: number;
 }
 
