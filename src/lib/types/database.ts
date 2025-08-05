@@ -39,7 +39,7 @@ export interface AuthUserTable {
 
 export interface AuthSessionTable {
     id: Generated<number>;
-    expires_at: number;
+    expires_at: Date;
     user_id: number;
 }
 

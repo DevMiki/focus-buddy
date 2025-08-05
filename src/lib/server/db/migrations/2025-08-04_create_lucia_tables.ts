@@ -12,7 +12,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .createTable("auth_session")
         .ifNotExists()
         .addColumn("id", "integer", col => col.primaryKey().notNull())
-        .addColumn("expires_at", "integer", col => col.notNull())
+        .addColumn("expires_at", "timestamptz", col => col.notNull())
         .addColumn("user_id", "integer", col => col.notNull())
         .addForeignKeyConstraint(
             "session_user_fk",

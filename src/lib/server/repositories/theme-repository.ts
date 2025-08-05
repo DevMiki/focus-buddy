@@ -1,5 +1,5 @@
 import type { NewTheme, Theme, ThemeUpdate } from "$lib/types/database"
-import { db } from "../db"
+import { db } from "../db/db"
 
 export async function findThemeById(id: number) {
     return await db.selectFrom('themes')

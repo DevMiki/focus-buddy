@@ -1,6 +1,6 @@
 // src/lib/server/db/migrator.ts
 import { Kysely, Migrator } from 'kysely';
-import { db } from '../db';
+import { db } from './db';
 // Import our new custom provider instead of the default one
 import { ESMFileMigrationProvider } from './custom-migration-provider';
 

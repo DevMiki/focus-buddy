@@ -1,4 +1,4 @@
-import { db } from "../db";
+import { db } from "./db";
 import { migrator } from "./migrator";
 
 async function runMigrations() {

@@ -1,4 +1,4 @@
-import { db } from '../db';
+import { db } from '../db/db';
 import type { NewStudySession, NewSessionSegment } from '$lib/types/database';
 import type { StudySession } from '$lib/types/session';
 
