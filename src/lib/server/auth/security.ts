@@ -3,7 +3,7 @@ import { env } from "$env/dynamic/private";
 
 const VITE_ORIGIN = env.VITE_ORIGIN ?? "http://localhost:5173";
 
-export function checkIfRequestOrigin(origin: string) {
+export function checkIfSameRequestOrigin(origin: string) {
 
     if (dev) true;
 

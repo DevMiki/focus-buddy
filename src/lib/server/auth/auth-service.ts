@@ -30,10 +30,11 @@ async function createSession(userId: number): Promise<string> {
     throw Error("Could not create session");
 }
 
-export async function validateSessionToken(token: string): Promise<AuthUser | null> {
+export async function getUserIfSessionValid(token?: string): Promise<AuthUser | null> {
 
+    if(!token) return null;
     const [id, secret] = token.split('.');
-    if (!id || secret) throw Error("Invalid session token")
+    if (!id || !secret) throw Error("Invalid session token")
 
     const session = await findAuthSessionById(id);
 
