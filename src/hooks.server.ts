@@ -18,12 +18,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 function checkAndThrowIfCSRFNotValid(event: RequestEvent) {
     const csrfProtectedMethods = ["POST", "PUT", "PATCH", "DELETE"];
     const method = event.request.method;
-    if (!csrfProtectedMethods.includes(method)) {
+    if (!csrfProtectedMethods.includes(method) || event.url.pathname.startsWith('/api')) {
         return;
     }
 
     const origin = event.request.headers.get("Origin");
-    if (!checkIfSameRequestOrigin(origin!)) {
-        throw error(403, "CSRF Error: Invalid origin");
+    if(origin){
+        if (!checkIfSameRequestOrigin(origin)) {
+            throw error(403, "CSRF Error: Invalid origin");
+        }
     }
 }

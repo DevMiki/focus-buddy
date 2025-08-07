@@ -6,6 +6,15 @@ import { db } from "$lib/server/db/db"
 import type { NewAuthKey, NewAuthUser } from "$lib/types/database"
 import { createAuthKey } from "$lib/server/repositories/auth-key-repository"
 
+export type SingUpActionData = {
+    errors?: {
+        username?: string;
+        password?: string;
+    },
+    username: string;
+    message: string;
+}
+
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
         throw redirect(302, '/')
@@ -17,14 +26,13 @@ export const actions: Actions = {
         const data = await request.formData();
         const username = data.get('username');
         const password = data.get('password');
-
+        
         if (typeof username !== 'string' || username.length < 3 || username.length > 31) {
             return fail(400, {
                 errors: { username: 'Username must be between 3 and 31 characters' },
                 username
             })
         }
-
         if (typeof password !== 'string' || password.length < 6 || password.length > 32) {
             return fail(400, {
                 errors: { password: 'Password must be between 6 and 32 characters' },
@@ -48,6 +56,7 @@ export const actions: Actions = {
                 const newAuthUser: NewAuthUser = {
                     username: username
                 }
+                console.log('son vivo')
                 const newUser = await createAuthUser(newAuthUser, trx);
 
                 const newAuthKey: NewAuthKey = {

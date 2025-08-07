@@ -1,4 +1,4 @@
-import type { AuthUserUpdate, Database, NewAuthUser } from '$lib/types/database';
+import type { AuthUser, AuthUserUpdate, Database, NewAuthUser } from '$lib/types/database';
 import type { Kysely } from 'kysely';
 import { db } from '../db/db';
 
@@ -16,11 +16,12 @@ export async function findAuthUserById(id: number) {
         .executeTakeFirst();
 }
 
-export async function findAuthUserByUsername(username: string) {
-    return await db.selectFrom('auth_user')
-    .where('username', '=', username)
-    .selectAll()
-    .execute();
+export async function findAuthUserByUsername(username: string): Promise<AuthUser | undefined> {
+	return await db
+		.selectFrom('auth_user')
+		.where('username', '=', username)
+		.selectAll()
+		.executeTakeFirst();
 }
 
 export async function findAllAuthUsers() {

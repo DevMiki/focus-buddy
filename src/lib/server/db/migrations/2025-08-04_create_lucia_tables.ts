@@ -4,7 +4,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable("auth_user")
         .ifNotExists()
-        .addColumn("id", "integer", col => col.primaryKey().notNull())
+        .addColumn("id", "integer", col => col.generatedAlwaysAsIdentity().primaryKey().notNull())
         .addColumn("username", "varchar(36)", col => col.notNull().unique())
         .execute();
 
@@ -28,7 +28,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable("auth_key")
         .ifNotExists()
-        .addColumn("id", "integer", col => col.primaryKey().notNull())
+        .addColumn("id", "integer", col => col.generatedAlwaysAsIdentity().primaryKey().notNull())
         .addColumn("hashed_password", "text")
         .addColumn("user_id", "integer", col => col.notNull())
         .addForeignKeyConstraint(

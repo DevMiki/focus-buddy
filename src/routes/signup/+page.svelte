@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import type { ActionData } from '../insights/$types';
+	import type { SingUpActionData } from './+page.server';
 
-	let { form }: { form: ActionData } = $props();
+	let { form }: { form: SingUpActionData } = $props();
+    let username = $state(form?.username ?? '');
+    let password = $state('');
+
 	let isSubmitting = $state(false);
 </script>
 
@@ -29,7 +32,7 @@
 					name="username"
 					type="text"
 					required
-					value={form?.username ?? ''}
+					bind:value={username}
 					aria-invalid={form?.errors?.username ? 'true' : undefined}
 				/>
 				{#if form?.errors?.username}
@@ -44,6 +47,7 @@
 					name="password"
 					type="password"
 					required
+                    bind:value={password}
 					aria-invalid={form?.errors?.password ? 'true' : undefined}
 				/>
 				{#if form?.errors?.password}
