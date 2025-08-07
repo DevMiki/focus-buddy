@@ -6,7 +6,7 @@ import { constantTimeEqual, generateSecureRandomString, hashSecret } from "./ses
 
 const SESSION_EXPIRES_IN_SECONDS = 60 * 60 * 24 * 3;
 
-async function createSession(userId: number): Promise<string> {
+export async function createSession(userId: number): Promise<string> {
     const sessionId = generateSecureRandomString();
     const createdAt = new Date();
     const expiresAt = new Date(Date.now() + (SESSION_EXPIRES_IN_SECONDS * 1000));

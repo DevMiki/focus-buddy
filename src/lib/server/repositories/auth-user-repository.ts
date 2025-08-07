@@ -1,7 +1,8 @@
-import type { AuthUserUpdate, NewAuthUser } from '$lib/types/database';
+import type { AuthUserUpdate, Database, NewAuthUser } from '$lib/types/database';
+import type { Kysely } from 'kysely';
 import { db } from '../db/db';
 
-export async function createAuthUser(user: NewAuthUser) {
+export async function createAuthUser(user: NewAuthUser, dbInstance: Kysely<Database> = db) {
     return await db.insertInto('auth_user')
         .values(user)
         .returningAll()
@@ -14,6 +15,14 @@ export async function findAuthUserById(id: number) {
         .selectAll()
         .executeTakeFirst();
 }
+
+export async function findAuthUserByUsername(username: string) {
+    return await db.selectFrom('auth_user')
+    .where('username', '=', username)
+    .selectAll()
+    .execute();
+}
+
 export async function findAllAuthUsers() {
     return await db.selectFrom('auth_user')
         .selectAll()
@@ -33,3 +42,4 @@ export async function deleteAuthUserById(id: number) {
         .where('id', '=', id)
         .executeTakeFirst();
 }
+
