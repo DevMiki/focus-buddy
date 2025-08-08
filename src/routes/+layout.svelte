@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ToastContainer from '$lib/components/ToastContainer.svelte';
-import Navbar from '$lib/Navbar.svelte';
+	import Navbar from '$lib/Navbar.svelte';
 	import type { Theme } from '$lib/types/database';
 	import '../app.css';
 	import type { Snippet } from 'svelte';
