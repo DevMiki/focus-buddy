@@ -27,9 +27,9 @@ export const actions: Actions = {
         const username = data.get('username');
         const password = data.get('password');
         
-        if (typeof username !== 'string' || username.length < 3 || username.length > 31) {
+        if (typeof username !== 'string' || username.length < 3 || username.length > 32) {
             return fail(400, {
-                errors: { username: 'Username must be between 3 and 31 characters' },
+                errors: { username: 'Username must be between 3 and 32 characters' },
                 username
             })
         }
