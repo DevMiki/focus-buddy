@@ -44,7 +44,6 @@ export const actions: Actions = {
                 const newAuthUser: NewAuthUser = {
                     username: username
                 }
-                console.log('son vivo')
                 const newUser = await createAuthUser(newAuthUser, trx);
 
                 const newAuthKey: NewAuthKey = {

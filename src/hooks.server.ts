@@ -1,6 +1,7 @@
 import { getUserIfSessionValid } from '$lib/server/auth/auth-service';
 import { isProtectedRoute } from '$lib/server/auth/route-protection';
 import { checkIfSameRequestOrigin } from '$lib/server/auth/security';
+import type { AuthUser } from '$lib/types/database';
 import { error, redirect, type Handle, type RequestEvent } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -11,12 +12,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	const sessionToken = event.cookies.get('auth_session');
-	const user = await getUserIfSessionValid(sessionToken);
+	const user: AuthUser | null = await getUserIfSessionValid(sessionToken);
 	if (user) {
 		event.locals.user = user;
 		return await resolve(event);
 	} else {
-		throw redirect(303, '/login');
+		throw redirect(302, '/');
 	}
 };
 

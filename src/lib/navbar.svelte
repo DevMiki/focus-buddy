@@ -1,14 +1,18 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
-	import type { Theme } from './types/database';
+	import type { AuthUser, Theme } from './types/database';
+	import { enhance } from '$app/forms';
 
 	let {
 		activeTheme = $bindable(),
-		themes = []
+		themes = [],
+		user = null
 	}: {
 		activeTheme?: Theme | null;
 		themes: Theme[];
+		user: AuthUser | null;
 	} = $props();
 	let isPanelOpen = $state(false);
 	let dropdownWrapper: HTMLDivElement;
@@ -46,54 +50,67 @@
 	</ul>
 
 	<!-- THE CUSTOM DROPDOWN -->
-	<div class="background-selector" bind:this={dropdownWrapper}>
-		<!-- 1. The Trigger Button -->
-		<button
-			class="dropdown-trigger"
-			class:open={isPanelOpen}
-			onclick={() => (isPanelOpen = !isPanelOpen)}
-			aria-haspopup="true"
-			aria-expanded={isPanelOpen}
-		>
-			<span>🎨 Theme</span>
-			<!-- An inline SVG for the chevron icon. It's clean and can be styled with CSS. -->
-			<svg
-				class="chevron"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 20 20"
-				fill="currentColor"
+	<div class="right-menu">
+		<div class="background-selector" bind:this={dropdownWrapper}>
+			<!-- 1. The Trigger Button -->
+			<button
+				class="dropdown-trigger"
+				class:open={isPanelOpen}
+				onclick={() => (isPanelOpen = !isPanelOpen)}
+				aria-haspopup="true"
+				aria-expanded={isPanelOpen}
 			>
-				<path
-					fill-rule="evenodd"
-					d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-					clip-rule="evenodd"
-				/>
-			</svg>
-		</button>
+				<span>🎨 Theme</span>
+				<!-- An inline SVG for the chevron icon. It's clean and can be styled with CSS. -->
+				<svg
+					class="chevron"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			</button>
 
-		<!-- 2. The Options Panel -->
-		{#if isPanelOpen}
-			<div class="dropdown-panel" transition:fade={{ duration: 150 }}>
-				<ul class="theme-options-list">
-					{#each themes as theme}
-						<li>
-							<button
-								class="option-button"
-								onclick={() => {
-									activeTheme = theme;
-									isPanelOpen = false;
-								}}
-							>
-								<!-- The text and the indicator are now properly separated for styling -->
-								<span class="option-text">{theme.name}</span>
-								{#if activeTheme?.image_url === theme.image_url}
-									<span class="active-indicator"></span>
-								{/if}
-							</button>
-						</li>
-					{/each}
-				</ul>
-			</div>
+			<!-- 2. The Options Panel -->
+			{#if isPanelOpen}
+				<div class="dropdown-panel" transition:fade={{ duration: 150 }}>
+					<ul class="theme-options-list">
+						{#each themes as theme}
+							<li>
+								<button
+									class="option-button"
+									onclick={() => {
+										activeTheme = theme;
+										isPanelOpen = false;
+									}}
+								>
+									<!-- The text and the indicator are now properly separated for styling -->
+									<span class="option-text">{theme.name}</span>
+									{#if activeTheme?.image_url === theme.image_url}
+										<span class="active-indicator"></span>
+									{/if}
+								</button>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+		</div>
+		{#if !user}
+			{#if $page.route.id === '/login'}
+				<a href="/signup" class="auth-button">Sign Up</a>
+			{:else if $page.route.id === '/signup'}
+				<a href="/login" class="auth-button">Login</a>
+			{/if}
+		{:else}
+			<form action="/logout" method="POST" use:enhance>
+				<button type="submit" class="auth-button">Logout</button>
+			</form>
 		{/if}
 	</div>
 </nav>
@@ -127,6 +144,25 @@
 		text-decoration: underline;
 	}
 
+	.right-menu {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.auth-button {
+		padding: 0.5rem 1rem;
+		border-radius: 6px;
+		background-color: #f43f5e;
+		color: white;
+		font-weight: 600;
+		transition: background-color 0.2s;
+	}
+
+	.auth-button:hover {
+		background-color: #be123c;
+		text-decoration: none;
+	}
 
 	/* The main container for positioning */
 	.background-selector {
@@ -217,7 +253,7 @@
 
 	/* The little dot indicator */
 	.active-indicator {
-		margin-left:5px;
+		margin-left: 5px;
 		display: inline-block;
 		width: 8px;
 		height: 8px;

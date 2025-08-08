@@ -9,6 +9,6 @@ export const actions: Actions = {
             await deleteSession(sessionToken);
             cookies.delete('auth_session', { path: '.' });
         }
-        throw redirect(302, '/login');
+        throw redirect(303, '/');
     }
-}
+};

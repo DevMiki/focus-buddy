@@ -7,11 +7,11 @@ import type { LayoutServerLoad } from "./$types";
  * 
  * @returns An object containing the list of themes
  */
-export const load: LayoutServerLoad = async () => {
+export const load: LayoutServerLoad = async (event) => {
+	const themes = await findAllThemes();
 
-    const themes = await findAllThemes();
-
-    return {
-        themes: themes
-    }
-}
+	return {
+		themes,
+		user: event.locals.user
+	};
+};
