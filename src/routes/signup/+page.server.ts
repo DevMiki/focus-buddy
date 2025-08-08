@@ -1,18 +1,14 @@
-import { fail, redirect } from "@sveltejs/kit"
-import type { Actions, PageServerLoad } from "./$types"
-import { createAuthUser, findAuthUserById, findAuthUserByUsername } from "$lib/server/repositories/auth-user-repository"
 import { createSession, hashPassword } from "$lib/server/auth/auth-service"
 import { db } from "$lib/server/db/db"
-import type { NewAuthKey, NewAuthUser } from "$lib/types/database"
 import { createAuthKey } from "$lib/server/repositories/auth-key-repository"
+import { createAuthUser, findAuthUserByUsername } from "$lib/server/repositories/auth-user-repository"
+import type { NewAuthKey, NewAuthUser } from "$lib/types/database"
+import { fail, redirect } from "@sveltejs/kit"
+import type { Actions, PageServerLoad } from "./$types"
 
 export type SingUpActionData = {
-    errors?: {
-        username?: string;
-        password?: string;
-    },
-    username: string;
-    message: string;
+    error?: string;
+    username?: string;
 }
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -28,24 +24,16 @@ export const actions: Actions = {
         const password = data.get('password');
         
         if (typeof username !== 'string' || username.length < 3 || username.length > 32) {
-            return fail(400, {
-                errors: { username: 'Username must be between 3 and 32 characters' },
-                username
-            })
+            return fail(400,  { error: 'Username must be between 3 and 32 characters', username },
+            )
         }
         if (typeof password !== 'string' || password.length < 6 || password.length > 32) {
-            return fail(400, {
-                errors: { password: 'Password must be between 6 and 32 characters' },
-                password
-            })
+            return fail(400,  { error: 'Password must be between 6 and 32 characters' })
         }
 
         const userToCheck = await findAuthUserByUsername(username)
         if (userToCheck) {
-            return fail(409, {
-                errors: { username: 'Username already exists.' },
-                username
-            })
+            return fail(409, { username: 'Username already exists.' })
         }
 
         const hashedPassword = await hashPassword(password);
@@ -81,11 +69,10 @@ export const actions: Actions = {
             // If anything inside the transaction fails, it automatically rolls back.
             // We check for a unique constraint violation on the username.
             if (error.code === '23505' && error.constraint === 'users_username_key') {
-                return fail(400, { errors: { username: 'Username is already taken.' }, username });
+                return fail(400, { error: 'Username is already taken.' } );
             }
             // For other unexpected errors
-            console.error(error);
-            return fail(500, { message: 'An internal error occurred.' });
+            return fail(500, { error: 'An internal error occurred.' });
         }
 
         // Redirect on success

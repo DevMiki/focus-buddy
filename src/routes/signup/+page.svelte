@@ -3,10 +3,18 @@
 	import type { SingUpActionData } from './+page.server';
 
 	let { form }: { form: SingUpActionData } = $props();
-    let username = $state(form?.username ?? '');
-    let password = $state('');
+	let username = $state(form?.username ?? '');
+	let password = $state('');
 
 	let isSubmitting = $state(false);
+
+	//TODO: check if necessary
+	$effect(() => {
+		if (form) {
+			username = form.username ?? '';
+			password = '';
+		}
+	});
 </script>
 
 <div class="auth-container">
@@ -18,6 +26,12 @@
 			method="POST"
 			use:enhance={() => {
 				isSubmitting = true;
+// Internally, the update() function does the following:
+// It takes the JSON response from the server.
+// It finds the reactive $props().form object that SvelteKit provided to your page component.
+// It updates the value of the form prop with the data from the server's fail() response.
+// It invalidates any other data that might have changed as a result of the action (e.g., if the action modified data that a load function depends on, update would trigger a re-run of that load function).
+// The result of the signup action becomes available to your page's reactive state immediately after the update() function completes within your use:enhance callback.
 				return async ({ update }) => {
 					// This runs after the server action completes.
 					await update();
@@ -33,10 +47,10 @@
 					type="text"
 					required
 					bind:value={username}
-					aria-invalid={form?.errors?.username ? 'true' : undefined}
+					aria-invalid={form?.error ? 'true' : undefined}
 				/>
-				{#if form?.errors?.username}
-					<p class="error-message">{form.errors.username}</p>
+				{#if form?.error}
+					<p class="error-message">{form.error}</p>
 				{/if}
 			</div>
 
@@ -47,20 +61,23 @@
 					name="password"
 					type="password"
 					required
-                    bind:value={password}
-					aria-invalid={form?.errors?.password ? 'true' : undefined}
+					bind:value={password}
+					aria-invalid={form?.error ? 'true' : undefined}
 				/>
-				{#if form?.errors?.password}
-					<p class="error-message">{form.errors.password}</p>
+				{#if form?.error}
+					<p class="error-message">{form.error}</p>
 				{/if}
 			</div>
-            <div class="button-wrapper">
-                <button type="submit" class="submit-btn" disabled={isSubmitting}>
-                {isSubmitting? 'Signing up...' : 'Sign Up'}
-            </button>
-            </div>
+			<div class="button-wrapper">
+				<button type="submit" class="submit-btn" disabled={isSubmitting}>
+					{isSubmitting ? 'Signing up...' : 'Sign Up'}
+				</button>
+			</div>
 		</form>
-        <p class="auth-link">Already have an account? <a href="/login">Log in</a></p>
+		{#if form?.error}
+			<p class="form-error-message">{form.error}</p>
+		{/if}
+		<p class="auth-link">Already have an account? <a href="/login">Log in</a></p>
 	</div>
 </div>
 
@@ -113,8 +130,8 @@
 		font-size: 0.875rem;
 	}
 	.submit-btn {
-        padding: 0.75rem;
-        margin-top: 0.75rem;
+		padding: 0.75rem;
+		margin-top: 0.75rem;
 		background: var(--color-primary, #3b82f6);
 		color: white;
 		border: none;
@@ -131,10 +148,10 @@
 		opacity: 0.6;
 		cursor: not-allowed;
 	}
-    .button-wrapper {
-        display:flex;
-        justify-content:center;
-    }
+	.button-wrapper {
+		display: flex;
+		justify-content: center;
+	}
 	.auth-link {
 		text-align: center;
 		color: #ccc;
@@ -142,5 +159,13 @@
 	.auth-link a {
 		color: var(--color-primary, #3b82f6);
 		text-decoration: none;
+	}
+	.form-error-message {
+		background-color: rgba(248, 113, 113, 0.2);
+		color: #f87171;
+		padding: 0.75rem;
+		border-radius: 6px;
+		text-align: center;
+		border: 1px solid #f87171;
 	}
 </style>

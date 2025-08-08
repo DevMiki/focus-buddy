@@ -10,8 +10,10 @@ export const handle: Handle = async ({ event, resolve }) => {
     const user = await getUserIfSessionValid(sessionToken);
     if(user){
         event.locals.user = user;
+        return await resolve(event);
+    } else {
+        throw new Error("user not found");                                                                                                                                                                                                                            
     }
-    return await resolve(event);                                                                                                                                                                                                                             
 }
 
 
