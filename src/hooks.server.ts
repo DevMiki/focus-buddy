@@ -18,7 +18,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 function checkAndThrowIfCSRFNotValid(event: RequestEvent) {
     const csrfProtectedMethods = ["POST", "PUT", "PATCH", "DELETE"];
     const method = event.request.method;
-    if (!csrfProtectedMethods.includes(method) || event.url.pathname.startsWith('/api')) {
+    if (!csrfProtectedMethods.includes(method)) {
         return;
     }
 
