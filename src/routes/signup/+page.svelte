@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { toasts } from '$lib/services/toasts.svelte';
 	import type { SingUpActionData } from './+page.server';
 
 	let { form }: { form: SingUpActionData } = $props();
@@ -26,15 +27,20 @@
 			method="POST"
 			use:enhance={() => {
 				isSubmitting = true;
-// Internally, the update() function does the following:
-// It takes the JSON response from the server.
-// It finds the reactive $props().form object that SvelteKit provided to your page component.
-// It updates the value of the form prop with the data from the server's fail() response.
-// It invalidates any other data that might have changed as a result of the action (e.g., if the action modified data that a load function depends on, update would trigger a re-run of that load function).
-// The result of the signup action becomes available to your page's reactive state immediately after the update() function completes within your use:enhance callback.
+				// Internally, the update() function does the following:
+				// It takes the JSON response from the server.
+				// It finds the reactive $props().form object that SvelteKit provided to your page component.
+				// It updates the value of the form prop with the data from the server's fail() response.
+				// It invalidates any other data that might have changed as a result of the action (e.g., if the action modified data that a load function depends on, update would trigger a re-run of that load function).
+				// The result of the signup action becomes available to your page's reactive state immediately after the update() function completes within your use:enhance callback.
 				return async ({ update }) => {
 					// This runs after the server action completes.
 					await update();
+					toasts.addToast({
+						type: 'success',
+						message: 'You have correctly signed up!',
+						duration: 2500
+					});
 					isSubmitting = false;
 				};
 			}}

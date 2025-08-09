@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { toasts } from '$lib/services/toasts.svelte';
 
 	let username: string = $state('');
 	let password: string = $state('');
@@ -16,6 +17,7 @@
 				isSubmitting = true;
 				return async ({ update }) => {
 					await update();
+					 toasts.addToast({ type: 'success', message: 'You have correctly logged in!', duration: 2500 });
 					isSubmitting = false;
 				};
 			}}

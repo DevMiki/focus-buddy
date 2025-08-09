@@ -5,6 +5,7 @@ import { createAuthUser, findAuthUserByUsername } from "$lib/server/repositories
 import type { NewAuthKey, NewAuthUser } from "$lib/types/database"
 import { fail, redirect } from "@sveltejs/kit"
 import type { Actions, PageServerLoad } from "./$types"
+import { toasts } from "$lib/services/toasts.svelte"
 
 export type SingUpActionData = {
     error?: string;

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { applyAction, enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
+	import { toasts } from './services/toasts.svelte';
 	import type { AuthUser, Theme } from './types/database';
-	import { enhance } from '$app/forms';
 
 	let {
 		activeTheme = $bindable(),
@@ -108,7 +109,19 @@
 				<a href="/signup" class="auth-button">Sign up</a>
 			{/if}
 		{:else}
-			<form action="/logout" method="POST" use:enhance>
+			<form action="/logout" method="POST" use:enhance={() => {
+
+				return async({result}) => {
+					if(result.type === 'redirect') {
+						toasts.addToast({
+							message: "You have been logged out successfully",
+							type: "success",
+							duration: 3000
+						})
+						await applyAction(result);
+					}
+				}
+			}}>
 				<button type="submit" class="auth-button">Logout</button>
 			</form>
 		{/if}
