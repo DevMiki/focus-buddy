@@ -5,20 +5,17 @@ import type { AuthUser } from '$lib/types/database';
 import { error, redirect, type Handle, type RequestEvent } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	checkAndThrowIfCSRFNotValid(event);
+    checkAndThrowIfCSRFNotValid(event);
 
-	if (!isProtectedRoute(event.route.id)) {
-		return await resolve(event);
-	}
+    const sessionToken = event.cookies.get('auth_session');
+    const user: AuthUser | null = await getUserIfSessionValid(sessionToken);
+    event.locals.user = user;
 
-	const sessionToken = event.cookies.get('auth_session');
-	const user: AuthUser | null = await getUserIfSessionValid(sessionToken);
-	if (user) {
-		event.locals.user = user;
-		return await resolve(event);
-	} else {
-		throw redirect(302, '/');
-	}
+    if (isProtectedRoute(event.route.id)) {
+        throw redirect(302, '/');
+    }
+
+    return await resolve(event);
 };
 
 
@@ -30,7 +27,7 @@ function checkAndThrowIfCSRFNotValid(event: RequestEvent) {
     }
 
     const origin = event.request.headers.get("Origin");
-    if(origin){
+    if (origin) {
         if (!checkIfSameRequestOrigin(origin)) {
             throw error(403, "CSRF Error: Invalid origin");
         }

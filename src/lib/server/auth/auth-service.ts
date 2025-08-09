@@ -54,7 +54,6 @@ export async function getUserIfSessionValid(token?: string): Promise<AuthUser | 
 
 async function checkIfValidSecret(tokenSecret: string, sessionHashedSecret: Uint8Array): Promise<boolean> {
     const tokenHashedSecret = await hashSecret(tokenSecret);
-    console.log(constantTimeEqual(tokenHashedSecret, sessionHashedSecret))
     return constantTimeEqual(tokenHashedSecret, sessionHashedSecret)
 }
 

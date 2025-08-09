@@ -102,10 +102,10 @@
 			{/if}
 		</div>
 		{#if !user}
-			{#if $page.route.id === '/login'}
-				<a href="/signup" class="auth-button">Sign Up</a>
-			{:else if $page.route.id === '/signup'}
+			{#if $page.route.id === '/signup'}
 				<a href="/login" class="auth-button">Login</a>
+			{:else}
+				<a href="/signup" class="auth-button">Sign up</a>
 			{/if}
 		{:else}
 			<form action="/logout" method="POST" use:enhance>
