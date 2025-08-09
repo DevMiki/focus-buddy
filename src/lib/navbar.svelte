@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { applyAction, enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { fade } from 'svelte/transition';
 	import { toasts } from './services/toasts.svelte';
 	import type { AuthUser, Theme } from './types/database';
@@ -103,7 +103,7 @@
 			{/if}
 		</div>
 		{#if !user}
-			{#if $page.route.id === '/signup'}
+			{#if page.route.id === '/signup'}
 				<a href="/login" class="auth-button">Login</a>
 			{:else}
 				<a href="/signup" class="auth-button">Sign up</a>
