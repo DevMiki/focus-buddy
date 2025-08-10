@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { page } from '$app/state';
 	import { toasts } from '$lib/services/toasts.svelte';
 
 	let username: string = $state('');
 	let password: string = $state('');
 	let isSubmitting: boolean = $state(false);
+
+	let redirectTo = $derived(page.url.searchParams.get('redirectTo') ?? '/');
 </script>
 
 <div class="auth-container">
@@ -36,6 +39,7 @@
 					{isSubmitting ? 'Loading...' : 'Login'}
 				</button>
 			</div>
+			<input type="hidden" name="redirectTo" value={redirectTo} />
 		</form>
         <p class="auth-link">Don't you have an account? <a href="/signup">Sign up</a></p>
 	</div>

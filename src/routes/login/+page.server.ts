@@ -1,15 +1,14 @@
+import { createSession, verifyPassword } from "$lib/server/auth/auth-service";
+import { findAuthKeyByUserId } from "$lib/server/repositories/auth-key-repository";
 import { findAuthUserByUsername } from "$lib/server/repositories/auth-user-repository";
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
-import type { AuthUser } from "$lib/types/database";
-import { findAuthKeyByUserId } from "$lib/server/repositories/auth-key-repository";
-import { createSession, verifyPassword } from "$lib/server/auth/auth-service";
-import { toasts } from "$lib/services/toasts.svelte";
 
 export const actions: Actions = {
-    login: async ({ request, cookies }) => {
-
+    login: async (event) => {
+        const { request, cookies } = event;
         const userData = await request.formData()
+        const redirectToUrl = userData.get("redirectTo") as string;
         const loginUserUsername = userData.get('username') as string;
         const loginUserPassword = userData.get('password') as string;
         const user = await findAuthUserByUsername(loginUserUsername)
@@ -36,6 +35,8 @@ export const actions: Actions = {
             secure: process.env.NODE_ENV === "production",
             maxAge: 60 * 60 * 24 * 7
         })
-        throw redirect(302, `/`);
+        
+        // Redirect to original destination or home page
+        throw redirect(302, redirectToUrl);
     }
 }
