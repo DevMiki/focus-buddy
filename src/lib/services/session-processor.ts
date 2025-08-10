@@ -68,6 +68,5 @@ export function processSession(events: SessionEvent[], plannedDuration: number):
     studySession.segments = segments;
     studySession.focusScore = studySession.totalStudyTime / (studySession.totalStudyTime + studySession.totalPauseTime) * 100 - 2.5 * studySession.totalPauses;
 
-    console.log('Going to return session with events:', events);
     return studySession;
 }

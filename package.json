@@ -13,7 +13,9 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"db:seed": "vite-node src/lib/server/seed.ts",
-		"db:migrate": "tsx src/lib/server/db/migrate.ts"
+		"db:migrate:up": "tsx src/lib/server/db/migrate.ts --latest",
+		"db:migrate:down": "tsx src/lib/server/db/migrate.ts --rollback",
+		"db:migrate:reset": "tsx src/lib/server/db/migrate.ts --reset"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",

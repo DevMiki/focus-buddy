@@ -1,12 +1,14 @@
 import { db } from '../db/db';
 import type { NewStudySession, NewSessionSegment } from '$lib/types/database';
 import type { StudySession } from '$lib/types/session';
+import { roundNumber } from '../utils';
 
 /**
  * Saves a complete study session, including its segments, within a database transaction.
  * @param session An application-level StudySession object from the session-processor.
  */
-export async function saveSession(session: StudySession) {
+export async function saveSession(session: StudySession, userId: number) {
+
     return await db.transaction().execute(async (trx) => {
         // 1. Prepare and insert the main session record.
         const sessionToInsert: NewStudySession = {
@@ -16,9 +18,11 @@ export async function saveSession(session: StudySession) {
             total_study_time: session.totalStudyTime,
             total_pause_time: session.totalPauseTime,
             total_pauses: session.totalPauses,
-            focus_score: session.focusScore
+            focus_score: session.focusScore,
+            user_id: userId,
         };
 
+        sessionToInsert.focus_score = roundNumber(session.focusScore, 0);
         const newSession = await trx
             .insertInto('study_sessions')
             .values(sessionToInsert)
@@ -43,17 +47,6 @@ export async function saveSession(session: StudySession) {
 
         return newSession;
     });
-}
-
-/**
- * Retrieves all study sessions, ordered by the most recently created.
- */
-export async function findAllSessions() {
-    return await db
-        .selectFrom('study_sessions')
-        .selectAll()
-        .orderBy('created_at', 'desc')
-        .execute();
 }
 
 /**

@@ -21,6 +21,7 @@ export interface StudySessionsTable {
     total_pauses: number;
     focus_score: number; 
     created_at: ColumnType<string, string | undefined, never>;
+    user_id: number;
 }
 
 export interface SessionSegmentsTable {

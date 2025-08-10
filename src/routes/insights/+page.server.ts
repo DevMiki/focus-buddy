@@ -1,5 +1,6 @@
-import { findAllSessions } from "$lib/server/repositories/session-segment-repository";
+import { findAllSessionsByUserId } from "$lib/server/repositories/study-session-repository";
 import type { StudySession } from "$lib/types/session";
+import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 type SerializableStudySession = Omit<StudySession, 'segments' | 'start_time' | 'end_time' | 'created_at'> & {
@@ -8,10 +9,13 @@ type SerializableStudySession = Omit<StudySession, 'segments' | 'start_time' | '
     createdAt: string;
 };
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
     console.log('Fetching all study sessions for insights page');
 
-    const sessions = await findAllSessions();
+    const user = locals.user;
+    if(!user) throw redirect(302, '/login?redirectTo=/insights');
+
+    const sessions = await findAllSessionsByUserId(user.id);
 
     console.log(sessions);
     const serializableSessions: SerializableStudySession[] = sessions.map(session => ({

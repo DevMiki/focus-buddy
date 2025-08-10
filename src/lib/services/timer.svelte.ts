@@ -32,7 +32,7 @@ export function createTimer() {
         return () => clearInterval(intervalId);
     })
 
-    async function saveSessionToServer(eventsToSave: SessionEvent[]) {
+    async function tryToSaveSession(eventsToSave: SessionEvent[]) {
         console.log('Sending session data to the server:', eventsToSave);
         try {
             const response = await fetch('/api/sessions', {
@@ -107,7 +107,7 @@ export function createTimer() {
             sessionEvents.push({ timestamp: Date.now(), type: 'end' } as SessionEvent);
             isSessionActive = false;
         }
-        saveSessionToServer(sessionEvents);
+        tryToSaveSession(sessionEvents);
         isSessionActive = false;
         sessionEvents = [];
     }
