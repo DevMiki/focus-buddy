@@ -11,12 +11,13 @@ export function processSession(events: SessionEvent[], plannedDuration: number):
         })
         return;
     }
-    
+    const firstSegmentTimestamp = events[0].timestamp;
+    const lastSegmentTimestamp = events[events.length - 1].timestamp;
     const studySession: StudySession = {
         id: 0,
         plannedDuration: 0,
-        startTime: events[0].timestamp,
-        endTime: Date.now(),
+        startTime: firstSegmentTimestamp,
+        endTime: lastSegmentTimestamp,
         segments: [],
         totalStudyTime: 0,
         totalPauseTime: 0,
@@ -28,12 +29,12 @@ export function processSession(events: SessionEvent[], plannedDuration: number):
     events = [...events].sort((firstEvent, secondEvent) => firstEvent.timestamp - secondEvent.timestamp);
     const segments: SessionSegment[] = [];
 
-    for (let i = 0; i < events.length; i++) {
+    for (let i = 0; i < events.length - 1; i++) {
         const currentEvent: SessionEvent = events[i];
         const nextEvent: SessionEvent = events[i + 1];
         const segmentStartTime = currentEvent.timestamp;
-        const segmentEndTime = nextEvent ? nextEvent.timestamp : Date.now();
-        const duration = Math.floor((segmentEndTime - segmentStartTime) / 1000);
+        const segmentEndTime = nextEvent.timestamp
+        const segmentDuration = Math.floor((segmentEndTime - segmentStartTime) / 1000);
 
 
         let segment: SessionSegment = {
@@ -48,7 +49,7 @@ export function processSession(events: SessionEvent[], plannedDuration: number):
             segment.startTime = segmentStartTime;
             segment.endTime = segmentEndTime;
             segments.push(segment);
-            studySession.totalStudyTime += duration;
+            studySession.totalStudyTime += segmentDuration;
             studySession.plannedDuration = plannedDuration;
         }
         else if (currentEvent.type === 'pause') {
@@ -56,12 +57,10 @@ export function processSession(events: SessionEvent[], plannedDuration: number):
             segment.startTime = segmentStartTime;
             segment.endTime = segmentEndTime;
             segments.push(segment);
-            studySession.totalPauseTime += duration;
+            studySession.totalPauseTime += segmentDuration;
             studySession.totalPauses += 1;
         }
-        else if (segment.type == 'end'){
-            let lastSegmentAdded = segments.length - 1
-            segments[lastSegmentAdded].endTime = segmentEndTime;
+        else if (segment.type == 'end') {
             studySession.endTime = segmentEndTime;
         }
     }

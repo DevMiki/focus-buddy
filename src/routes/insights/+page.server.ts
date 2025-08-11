@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     const user = locals.user;
     if(!user) throw redirect(302, '/login?redirectTo=/insights');
-
+ 
     const sessions = await findAllSessionsByUserId(user.id);
 
     console.log(sessions);

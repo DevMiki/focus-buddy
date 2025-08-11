@@ -1,9 +1,9 @@
 import type { SessionEvent } from "$lib/types/session";
 import { toasts } from "./toasts.svelte";
 
-const SECONDS_IN_MINUTE = 60;
+const SECONDS_IN_A_MINUTE = 60;
 const MINUTES_TO_STUDY = 25;
-const INITIAL_DURATION_SECONDS = MINUTES_TO_STUDY * SECONDS_IN_MINUTE;
+const INITIAL_DURATION_SECONDS = MINUTES_TO_STUDY * SECONDS_IN_A_MINUTE;
 
 export function createTimer() {
 
