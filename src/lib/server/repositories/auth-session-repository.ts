@@ -1,4 +1,6 @@
+import { toasts } from '$lib/services/toasts.svelte';
 import type { AuthSession, AuthSessionUpdate, NewAuthSession } from '$lib/types/database';
+import type { SessionEvent } from '$lib/types/session';
 import { db } from '../db/db';
 
 export async function createAuthSession(session: NewAuthSession) {

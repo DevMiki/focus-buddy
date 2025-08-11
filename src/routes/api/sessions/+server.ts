@@ -7,7 +7,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
     const user = locals.user;
     if(!user){
-        throw error(403, "User not authenticated");
+        return new Response(null, { status: 204 });
     }
 
     try {
@@ -30,3 +30,5 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         return json({ error: 'Failed to save session' }, { status: 500 });
     }
 }
+
+

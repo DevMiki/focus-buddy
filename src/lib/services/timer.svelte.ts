@@ -1,3 +1,4 @@
+import type { AuthUser, Theme } from "$lib/types/database";
 import type { SessionEvent } from "$lib/types/session";
 import { toasts } from "./toasts.svelte";
 
@@ -5,7 +6,11 @@ const SECONDS_IN_A_MINUTE = 60;
 const MINUTES_TO_STUDY = 25;
 const INITIAL_DURATION_SECONDS = MINUTES_TO_STUDY * SECONDS_IN_A_MINUTE;
 
-export function createTimer() {
+interface TimerOptions {
+    onSessionComplete?: (eventsToSave: SessionEvent[], plannedDuration: number) => void;
+}
+
+export function createTimer(options: TimerOptions = {}) {
 
     let mode = $state<'studying' | 'paused' | 'idle'>('idle');
     let remainingStudySeconds = $state<number>(INITIAL_DURATION_SECONDS);
@@ -31,36 +36,6 @@ export function createTimer() {
 
         return () => clearInterval(intervalId);
     })
-
-    async function tryToSaveSession(eventsToSave: SessionEvent[]) {
-        console.log('Sending session data to the server:', eventsToSave);
-        try {
-            const response = await fetch('/api/sessions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    events: eventsToSave,
-                    plannedDuration: INITIAL_DURATION_SECONDS
-                }),
-            });
-
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Error saving session:', errorData);
-                toasts.addToast({ type: 'error', message: 'Error saving study session!', duration: 2500 });
-            } else {
-                console.log('Session successfully saved');
-                toasts.addToast({ type: 'success', message: 'Study session saved successfully!', duration: 2500 });
-            }
-        } catch (error) {
-            console.error("Network error while trying to save session:", error);
-            toasts.addToast({ type: 'error', message: 'Error saving study session!', duration: 2500 });
-        }
-
-    }
 
     function play() {
         toasts.addToast({
@@ -107,7 +82,9 @@ export function createTimer() {
             sessionEvents.push({ timestamp: Date.now(), type: 'end' } as SessionEvent);
             isSessionActive = false;
         }
-        tryToSaveSession(sessionEvents);
+        if(options.onSessionComplete){
+            options.onSessionComplete(sessionEvents, INITIAL_DURATION_SECONDS);
+        }
         isSessionActive = false;
         sessionEvents = [];
     }

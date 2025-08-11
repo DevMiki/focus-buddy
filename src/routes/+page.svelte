@@ -2,10 +2,22 @@
 	import PlayPauseButtons from '$lib/components/PlayPauseButtons.svelte';
 	import ResetButton from '$lib/components/ResetButton.svelte';
 	import { createTimer } from '$lib/services/timer.svelte';
+	import type { SessionEvent } from '$lib/types/session.js';
+	import { sessionApi } from './api/session-api.js';
 
-	const timer = createTimer();
+	let { data } = $props();
+	const CIRCLE_RADIUS = 45; // Our circle's radius in the 100x100 viewBox
+	const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
 
 	const INITIAL_DURATION_SECONDS = 25 * 60;
+
+	function handleSessionComplete(events: SessionEvent[], plannedDuration: number): void {
+		sessionApi.tryToSaveSession(events, plannedDuration);
+	}
+	
+	const timerOptions = data.user ? { onSessionComplete: handleSessionComplete } : {};
+	const timer = createTimer(timerOptions);
+
 	let isRunning = $derived(timer.mode === 'studying');
 
 	// No change needed here, but let's rename for clarity
@@ -19,10 +31,6 @@
 	let progress = $derived(
 		(INITIAL_DURATION_SECONDS - timer.remainingStudySeconds) / INITIAL_DURATION_SECONDS
 	);
-
-	const CIRCLE_RADIUS = 45; // Our circle's radius in the 100x100 viewBox
-	const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
-
 	let progress_offset = $derived(CIRCUMFERENCE * (1 - progress));
 </script>
 
