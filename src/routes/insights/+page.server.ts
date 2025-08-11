@@ -17,7 +17,6 @@ export const load: PageServerLoad = async ({ locals }) => {
  
     const sessions = await findAllSessionsByUserId(user.id);
 
-    console.log(sessions);
     const serializableSessions: SerializableStudySession[] = sessions.map(session => ({
         id: session.id,
         plannedDuration: session.planned_duration,

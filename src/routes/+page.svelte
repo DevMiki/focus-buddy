@@ -119,12 +119,6 @@
 		}
 	}
 
-	.flex-center {
-		display: flex;
-		justify-content: center;
-		gap: clamp(0.5rem, 1vw, 1.5rem);
-	}
-
 	.action-buttons {
 		display: flex;
 		align-items: center;
