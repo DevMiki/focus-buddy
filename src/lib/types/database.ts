@@ -11,6 +11,19 @@ export interface ThemesTable {
     secondary_color: string;
 }
 
+export interface StudySessionTableSelect {
+    id: number;
+    user_id: number;
+    planned_duration: number;
+    start_time: number;
+    end_time: number;
+    total_study_time: number;
+    total_pause_time: number;
+    total_pauses: number;
+    focus_score: number;
+    created_at: string;
+}
+
 export interface StudySessionsTable {
     id: Generated<number>;
     planned_duration: number;
@@ -19,15 +32,15 @@ export interface StudySessionsTable {
     total_study_time: number;
     total_pause_time: number;
     total_pauses: number;
-    focus_score: number; 
+    focus_score: number;
     created_at: ColumnType<string, string | undefined, never>;
     user_id: number;
 }
 
 export interface SessionSegmentsTable {
     id: Generated<number>;
-    session_id: number;  
-    type: 'study' | 'pause' | 'end'; 
+    session_id: number;
+    type: 'study' | 'pause' | 'end';
     start_time: number;
     end_time: number;
 }

@@ -50,31 +50,3 @@ export async function deleteSessionIfExpired(session: AuthSession): Promise<void
         await db.deleteFrom('auth_session').where('id', '=', session.id).execute();
     }
 }
-
-// SESSION PAGINATION SECTION
-
-export async function getPaginatedAuthSessionsByUserId(userId: number, pageOptions: {
-    limit: number,
-    offset: number
-}) {
-    const sessions = await db
-    .selectFrom('auth_session')
-    .where('user_id', '=', userId)
-    .selectAll()
-    .orderBy('created_at', 'desc')
-    .limit(pageOptions.limit)
-    .offset(pageOptions.offset)
-    .execute();
-
-    const { count } = await db
-    .selectFrom('auth_session')
-    .where('user_id', '=', userId)
-    .select(db.fn.count('id').as('count'))
-    .executeTakeFirstOrThrow();
-
-    return {
-        sessions,
-        total: Number(count),
-    };
-}
-

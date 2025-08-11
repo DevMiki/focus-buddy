@@ -1,18 +1,11 @@
 <script lang="ts">
-	type Session = {
-		id: number;
-		createdAt: string;
-		plannedDuration: number;
-		totalStudyTime: number;
-		totalPauseTime: number;
-		totalPauses: number;
-		focusScore: number;
-	};
+	import type { StudySession } from "$lib/types/session";
+
 
 	let {
 		sessions,
 		onSessionSelect
-	}: { sessions: Session[]; onSessionSelect: (sessionId: number) => void } = $props();
+	}: { sessions: StudySession[]; onSessionSelect: (sessionId: number) => void } = $props();
 
 	function formatDuration(seconds: number): string {
 		return new Date(seconds * 1000).toISOString().slice(14, 19);

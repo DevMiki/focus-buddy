@@ -1,35 +1,29 @@
-import { findAllSessionsByUserId } from "$lib/server/repositories/study-session-repository";
-import type { StudySession } from "$lib/types/session";
+
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
+import { getPaginatedStudySessionsByUserId } from "$lib/server/repositories/study-session-repository";
+import { mapStudySessionTableToStudySession } from "$lib/server/utils";
 
-type SerializableStudySession = Omit<StudySession, 'segments' | 'start_time' | 'end_time' | 'created_at'> & {
-    startTime: number;
-    endTime: number;
-    createdAt: string;
-};
-
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
     console.log('Fetching all study sessions for insights page');
 
     const user = locals.user;
-    if(!user) throw redirect(302, '/login?redirectTo=/insights');
- 
-    const sessions = await findAllSessionsByUserId(user.id);
+    if (!user) throw redirect(302, '/login?redirectTo=/insights');
 
-    const serializableSessions: SerializableStudySession[] = sessions.map(session => ({
-        id: session.id,
-        plannedDuration: session.planned_duration,
-        totalStudyTime: session.total_study_time,
-        totalPauseTime: session.total_pause_time,
-        totalPauses: session.total_pauses,
-        startTime: Number(session.start_time),
-        endTime: Number(session.end_time),
-        createdAt: session.created_at,
-        focusScore: session.focus_score
-    }));
+    const pageNumber = parseInt(url.searchParams.get('page') ?? "1");
+    const pageSize = parseInt(url.searchParams.get('size') ?? "10");
+    const offset = (pageNumber - 1) * pageSize;
+
+
+    let { paginatedSessions, totalCount } = await getPaginatedStudySessionsByUserId(user.id, { size: pageSize, offset })
+
+    let sessions = mapStudySessionTableToStudySession(paginatedSessions);
 
     return {
-        sessions: serializableSessions
+        sessions,
+        totalCount,
+        pageNumber,
+        pageSize
     }
 }
+
