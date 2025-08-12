@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     if (!user) throw redirect(302, '/login?redirectTo=/insights');
 
     const pageNumber = parseInt(url.searchParams.get('page') ?? "1");
-    const pageSize = parseInt(url.searchParams.get('size') ?? "5");
+    const pageSize = Math.min(parseInt(url.searchParams.get('size') ?? '10'), 50);
     const offset = (pageNumber - 1) * pageSize;
 
 
