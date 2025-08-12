@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PaginationControls from '$lib/components/PaginationControls.svelte';
 	import SessionDetail from '$lib/components/SessionDetail.svelte';
 	import SessionTable from '$lib/components/SessionTable.svelte';
 
@@ -31,6 +32,7 @@
 	<div class="table-wrapper">
 		<SessionTable sessions={data.sessions} onSessionSelect={handleSessionSelect} />
 	</div>
+	<PaginationControls pageNumber={data.pageNumber} pageSize={data.pageSize} totalStudySessionsCount={data.totalCount} />
 
 	{#if selectedSession}
 		<div class="detail-wrapper">

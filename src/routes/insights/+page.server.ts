@@ -11,11 +11,11 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     if (!user) throw redirect(302, '/login?redirectTo=/insights');
 
     const pageNumber = parseInt(url.searchParams.get('page') ?? "1");
-    const pageSize = parseInt(url.searchParams.get('size') ?? "10");
+    const pageSize = parseInt(url.searchParams.get('size') ?? "5");
     const offset = (pageNumber - 1) * pageSize;
 
 
-    let { paginatedSessions, totalCount } = await getPaginatedStudySessionsByUserId(user.id, { size: pageSize, offset })
+    let { paginatedSessions, totalStudySessionsCount: totalCount } = await getPaginatedStudySessionsByUserId(user.id, { size: pageSize, offset })
 
     let sessions = mapStudySessionTableToStudySession(paginatedSessions);
 

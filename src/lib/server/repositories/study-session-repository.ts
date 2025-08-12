@@ -47,7 +47,7 @@ export async function getPaginatedStudySessionsByUserId(userId: number, pageOpti
 
     return {
         paginatedSessions,
-        totalCount: Number(count),
+        totalStudySessionsCount: Number(count),
     };
 }
 
