@@ -25,7 +25,7 @@
 		>&laquo; Previous</a>
         <span class="page-info">Page {pageNumber} of {totalPages}</span>
 		<a
-			href="?pageNumber={pageNumber + 1}&pageSize={pageSize}}"
+			href="?pageNumber={pageNumber + 1}&pageSize={pageSize}"
 			class="nav-button"
             aria-label={`Go to next page (${pageNumber + 1} of ${totalPages})`}
 			aria-disabled={pageNumber >= totalPages}
@@ -41,31 +41,51 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 1rem 0;
-		font-size: 0.9rem;
-		color: #ccc;
+		padding: 1rem;
+		margin-top: -1rem;
+		font-size: 0.875rem;
+		color: #e2e8f0;
+		border: 1px solid #444;
+		border-radius: 8px;
+		background-color: rgba(106, 106, 106, 0.3);
 	}
+
 	.navigator {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 1rem;
 	}
+
 	.nav-button {
-		padding: 0.5rem 1rem;
-		border: 1px solid #555;
-		border-radius: 6px;
+		padding: 0.625rem 1.25rem;
+		border: 1px solid #444;
+		border-radius: 8px;
 		text-decoration: none;
 		color: white;
 		background-color: rgba(255, 255, 255, 0.1);
+		transition: all 0.2s ease;
+		font-weight: 500;
 	}
+
 	.nav-button:not(.disabled):hover {
 		background-color: rgba(255, 255, 255, 0.2);
+		border-color: #666;
+		transform: translateY(-1px);
 	}
+
 	.nav-button.disabled {
 		opacity: 0.5;
-		pointer-events: none; /* Disables clicks */
+		pointer-events: none;
 	}
+
 	.page-info {
-		padding: 0 0.5rem;
+		padding: 0 1rem;
+		color: #94a3b8;
+		font-weight: 500;
+	}
+
+	.summary {
+		color: #94a3b8;
+		font-size: 0.875rem;
 	}
 </style>
