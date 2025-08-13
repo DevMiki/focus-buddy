@@ -83,7 +83,6 @@
 	.table-container.has-results {
 		display: block;
 		min-height: 307px;
-		overflow: auto;
 		width: 100%;
 		box-sizing: border-box;
 	}

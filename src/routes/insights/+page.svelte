@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import FilterControls from '$lib/components/FilterControls.svelte';
 	import PaginationControls from '$lib/components/PaginationControls.svelte';
 	import SessionDetail from '$lib/components/SessionDetail.svelte';
 	import SessionTable from '$lib/components/SessionTable.svelte';
@@ -28,6 +29,19 @@
 		url.searchParams.set('pageNumber', '1');
 		goto(url, { keepFocus: true, noScroll: true });
 	}
+
+	function handleFilterChange(filters: Record<string, string | string[] | number>) {
+		const url = new URL(data.url);
+		for (const [key, value] of Object.entries(filters)) {
+			if (value) {
+				url.searchParams.set(key, String(value));
+			} else {
+				url.searchParams.delete(key);
+			}
+		}
+		url.searchParams.set('pageNumber', '1');
+		goto(url, { keepFocus: true, noScroll: true, invalidateAll: true });
+	}
 </script>
 
 <div class="insights-page">
@@ -37,6 +51,8 @@
 			Review your past sessions to understand your focus patterns. Click a session to see details.
 		</p>
 	</div>
+
+	<FilterControls initialFilters={data.filters} onFilterChange={handleFilterChange} />
 
 	<div class="table-wrapper">
 		<SessionTable
