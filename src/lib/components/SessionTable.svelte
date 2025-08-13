@@ -75,9 +75,10 @@
 <style>
 	.table-container {
 		overflow-x: auto;
-		border: 1px solid #444;
+		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: 8px;
-		background-color: rgba(106, 106, 106, 0.3);
+		background-color: rgba(23, 23, 23, 0.5);
+		backdrop-filter: blur(10px);
 	}
 
 	.table-container.has-results {
@@ -90,20 +91,21 @@
 		width: 100%;
 		border-collapse: collapse;
 		text-align: left;
+		color: #ccc;
 	}
 	td {
 		padding: 0.75rem 1rem;
-		border-bottom: 1px solid #444;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 	}
 	thead {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: rgba(50, 50, 50, 0.5);
 	}
 	tbody tr {
 		cursor: pointer;
 		transition: background-color 0.2s ease;
 	}
 	tbody tr:hover {
-		background-color: rgba(255, 255, 255, 0.05);
+		background-color: rgba(255, 255, 255, 0.2);
 	}
 	tbody tr:last-child td {
 		border-bottom: none;

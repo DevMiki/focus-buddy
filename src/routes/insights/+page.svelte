@@ -44,17 +44,19 @@
 	}
 </script>
 
-<div class="insights-page">
-	<div class="insights-header flex flex-col gap-4 text-center">
-		<h1>Your Study Insights</h1>
-		<p>
+<div class="insights-page max-w-7xl mx-auto px-4 py-8">
+	<div class="insights-header mb-8 text-center">
+		<h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Your Study Insights</h1>
+		<p class="text-gray-300 max-w-2xl mx-auto">
 			Review your past sessions to understand your focus patterns. Click a session to see details.
 		</p>
 	</div>
 
-	<FilterControls initialFilters={data.filters} onFilterChange={handleFilterChange} />
+	<div class="mb-8">
+		<FilterControls initialFilters={data.filters} onFilterChange={handleFilterChange} />
+	</div>
 
-	<div class="table-wrapper">
+	<div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden mb-6">
 		<SessionTable
 			sortBy={data.sortBy}
 			sortOrder={data.sortOrder as 'asc' | 'desc'}
@@ -63,15 +65,20 @@
 			{handleSort}
 		/>
 	</div>
-	<PaginationControls
-		pageNumber={data.pageNumber}
-		pageSize={data.pageSize}
-		totalStudySessionsCount={data.totalCount}
-	/>
+	
+	<div class="mb-8">
+		<PaginationControls
+			pageNumber={data.pageNumber}
+			pageSize={data.pageSize}
+			totalStudySessionsCount={data.totalCount}
+		/>
+	</div>
 
 	{#if selectedSession}
-		<div class="detail-wrapper">
-			<h2>Details for session on {new Date(selectedSession.createdAt).toLocaleDateString()}</h2>
+		<div class="detail-wrapper bg-gray-800 rounded-lg shadow-lg p-6">
+			<h2 class="text-xl font-semibold text-white mb-4">
+				Details for session on {new Date(selectedSession.createdAt).toLocaleDateString()}
+			</h2>
 			<SessionDetail session={selectedSession} />
 		</div>
 	{/if}
@@ -79,21 +86,8 @@
 
 <style>
 	.insights-page {
-		margin: 0 2rem;
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
-	}
-	h1 {
-		font-size: 2.5rem;
-		font-weight: bold;
-	}
-	h2 {
-		text-shadow:
-			0 0 0.5px rgba(255, 255, 255, 0.331),
-			0 0.5px 0.5px rgba(57, 57, 57, 0.7);
-	}
-	p {
-		color: #eee;
+		gap: 2rem;
 	}
 </style>
