@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import PaginationControls from '$lib/components/PaginationControls.svelte';
 	import SessionDetail from '$lib/components/SessionDetail.svelte';
 	import SessionTable from '$lib/components/SessionTable.svelte';
@@ -19,6 +20,14 @@
 			selectedSessionId = sessionId;
 		}
 	}
+
+	function handleSort(sortBy: string, sortOrder: 'asc' | 'desc') {
+		const url = new URL(data.url);
+		url.searchParams.set('sortBy', sortBy);
+		url.searchParams.set('sortOrder', sortOrder);
+		url.searchParams.set('pageNumber', '1');
+		goto(url, { keepFocus: true, noScroll: true });
+	}
 </script>
 
 <div class="insights-page">
@@ -30,9 +39,19 @@
 	</div>
 
 	<div class="table-wrapper">
-		<SessionTable sessions={data.sessions} onSessionSelect={handleSessionSelect} />
+		<SessionTable
+			sortBy={data.sortBy}
+			sortOrder={data.sortOrder as 'asc' | 'desc'}
+			sessions={data.sessions}
+			onSessionSelect={handleSessionSelect}
+			{handleSort}
+		/>
 	</div>
-	<PaginationControls pageNumber={data.pageNumber} pageSize={data.pageSize} totalStudySessionsCount={data.totalCount} />
+	<PaginationControls
+		pageNumber={data.pageNumber}
+		pageSize={data.pageSize}
+		totalStudySessionsCount={data.totalCount}
+	/>
 
 	{#if selectedSession}
 		<div class="detail-wrapper">

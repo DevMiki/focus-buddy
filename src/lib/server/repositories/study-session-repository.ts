@@ -1,3 +1,4 @@
+import type { StudySessionsTable } from "$lib/types/database";
 import { db } from "../db/db";
 
 export async function findAllSessions() {
@@ -26,17 +27,24 @@ export async function findSessionByUserId(id: number) {
 }
 
 // SESSION PAGINATION SECTION
+type SortableSessionsColumns = keyof StudySessionsTable;
 export async function getPaginatedStudySessionsByUserId(userId: number, pageOptions: {
-    size: number,
-    offset: number
+    pageSize: number,
+    offset: number,
+    sortBy: SortableSessionsColumns,
+    sortOrder: 'asc' | 'desc'
 }) {
+
+    const { pageSize: size, offset, sortBy, sortOrder } = pageOptions;
+    
+
     const paginatedSessions = await db
     .selectFrom('study_sessions')
     .where('user_id', '=', userId)
     .selectAll()
-    .orderBy('created_at', 'desc')
-    .limit(pageOptions.size)
-    .offset(pageOptions.offset)
+    .orderBy(sortBy, sortOrder)
+    .limit(size)
+    .offset(offset)
     .execute();
 
     const { count } = await db

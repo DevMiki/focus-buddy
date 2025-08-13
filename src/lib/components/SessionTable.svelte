@@ -1,11 +1,36 @@
 <script lang="ts">
-	import type { StudySession } from "$lib/types/session";
+	import type { StudySession } from '$lib/types/session';
+	import SortableHeader from './SortableHeader.svelte';
 
+	export type SortableColumn = keyof StudySession;
+
+	type FieldLabel = Record<
+		keyof Omit<StudySession, 'id' | 'endTime' | 'segments' | 'startTime'>,
+		string
+	>;
+
+	const studySessionsLabels: FieldLabel = {
+		createdAt: 'Date',
+		plannedDuration: 'Planned Duration',
+		totalStudyTime: 'Total Study Time',
+		totalPauseTime: 'Total Pause Time',
+		totalPauses: 'Total Pauses',
+		focusScore: 'Focus Score'
+	};
 
 	let {
+		sortBy,
+		sortOrder,
 		sessions,
-		onSessionSelect
-	}: { sessions: StudySession[]; onSessionSelect: (sessionId: number) => void } = $props();
+		onSessionSelect,
+		handleSort
+	}: {
+		sortBy: SortableColumn;
+		sortOrder: 'asc' | 'desc';
+		sessions: StudySession[];
+		onSessionSelect: (sessionId: number) => void;
+		handleSort: (sortBy: SortableColumn, sortOrder: 'asc' | 'desc') => void;
+	} = $props();
 
 	function formatDuration(seconds: number): string {
 		return new Date(seconds * 1000).toISOString().slice(14, 19);
@@ -16,12 +41,15 @@
 	<table>
 		<thead>
 			<tr>
-				<th>Date</th>
-				<th>Planned Duration</th>
-				<th>Total Study Time</th>
-				<th>Total Pause Time</th>
-				<th>Total Pauses</th>
-				<th>Focus Score</th>
+				{#each Object.entries(studySessionsLabels) as [columnId, label]}
+					<SortableHeader
+						{columnId}
+						{label}
+						currentSortBy={sortBy}
+						currentSortOrder={sortOrder}
+						{handleSort}
+					/>
+				{/each}
 			</tr>
 		</thead>
 		<tbody>

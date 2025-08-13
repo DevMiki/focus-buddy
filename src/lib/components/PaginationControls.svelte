@@ -17,7 +17,7 @@
 	</span>
 	<div class="navigator">
 		<a
-        href="?page={pageNumber - 1}&pageSize={pageSize}"
+        href="?pageNumber={pageNumber - 1}&pageSize={pageSize}"
         class="nav-button"
             aria-label={`Go to previous page (${pageNumber - 1} of ${totalPages})`}
 			aria-disabled={pageNumber <= 1}
@@ -25,7 +25,7 @@
 		>&laquo; Previous</a>
         <span class="page-info">Page {pageNumber} of {totalPages}</span>
 		<a
-			href="?page={pageNumber + 1}&limit={pageSize}}"
+			href="?pageNumber={pageNumber + 1}&pageSize={pageSize}}"
 			class="nav-button"
             aria-label={`Go to next page (${pageNumber + 1} of ${totalPages})`}
 			aria-disabled={pageNumber >= totalPages}

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import ToastContainer from '$lib/components/ToastContainer.svelte';
-	import Navbar from '$lib/Navbar.svelte';
 	import type { AuthUser, Theme } from '$lib/types/database';
-	import '../app.css';
 	import type { Snippet } from 'svelte';
+	import '../app.css';
+	import Navbar from '$lib/Navbar.svelte';
 
 	let {
 		data,
