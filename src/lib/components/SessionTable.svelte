@@ -37,7 +37,7 @@
 	}
 </script>
 
-<div class="table-container">
+<div class="table-container" class:has-results={sessions}>
 	<table>
 		<thead>
 			<tr>
@@ -79,12 +79,19 @@
 		border-radius: 8px;
 		background-color: rgba(106, 106, 106, 0.3);
 	}
+
+	.table-container.has-results {
+		display: block;
+		min-height: 307px;
+		overflow: auto;
+		width: 100%;
+		box-sizing: border-box;
+	}
 	table {
 		width: 100%;
 		border-collapse: collapse;
 		text-align: left;
 	}
-	th,
 	td {
 		padding: 0.75rem 1rem;
 		border-bottom: 1px solid #444;

@@ -48,6 +48,8 @@
 		border: 1px solid #444;
 		border-radius: 8px;
 		background-color: rgba(106, 106, 106, 0.3);
+		width: 100%;
+		box-sizing: border-box;
 	}
 
 	.navigator {
