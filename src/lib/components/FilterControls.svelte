@@ -40,26 +40,39 @@
 		for (const [key, value] of Object.entries(allFilters)) {
 			if (value !== '' && value !== 0 && value !== null && value !== undefined) {
 				activeFilters[key] = value;
-				console.log(key);
 			}
 		}
 		return activeFilters;
 	}
 
 	$effect(() => {
+		const allFilters: Record<string, string | string[] | number> = {
+			...filters
+		};
+
 		const timer = setTimeout(() => {
-			onFilterChange(getActiveFilters(filters));
+			onFilterChange(allFilters);
 		}, 500);
 
 		return () => clearTimeout(timer);
 	});
 
+	const defaultFilters = {
+		dateFrom: '' as string,
+		dateTo: '' as string,
+		plannedDuration_gte: 0,
+		plannedDuration_lte: 0,
+		totalStudyTime_gte: 0,
+		totalStudyTime_lte: 0,
+		totalPauseTime_gte: 0,
+		totalPauseTime_lte: 0,
+		focusScore_gte: 0,
+		focusScore_lte: 0
+	};
+
 	function resetFilters() {
-		Object.keys(filters).forEach((key) => {
-			if (initialFilters.hasOwnProperty(key)) {
-				filters[key] = initialFilters[key];
-			}
-		});
+		Object.assign(filters, defaultFilters);
+		onFilterChange(getActiveFilters(filters));
 	}
 </script>
 
