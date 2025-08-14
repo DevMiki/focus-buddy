@@ -1,5 +1,6 @@
 <script lang="ts">
 	import RangeFilter from './RangeFilter.svelte';
+	import { slide } from 'svelte/transition';
 
 	let {
 		initialFilters,
@@ -8,6 +9,8 @@
 		initialFilters: Record<string, string | string[] | number>;
 		onFilterChange: (filters: Record<string, string | string[] | number>) => void;
 	} = $props();
+
+	let showFilters = $state(false);
 
 	let filters: Record<string, string | string[] | number> = $state({
 		dateFrom: initialFilters.dateFrom ?? ('' as string),
@@ -76,57 +79,120 @@
 	}
 </script>
 
-<div class="filter-controls">
-	<div class="grid lg:grid-cols-5 gap-5">
-		<div class="filter-group">
-			<h3 class="font-semibold text-white mb-2">Date Range</h3>
-			<div class="space-y-2">
-				<div class="flex items-center">
-					<label for="dateFrom" class="block text-sm font-medium text-gray-300">From:</label>
-					<input
-						type="date"
-						id="dateFrom"
-						bind:value={filters.dateFrom}
-						class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-					/>
+<div class="filter-container">
+	<button class="filter-header" onclick={() => (showFilters = !showFilters)}>
+		<h2>Filters</h2>
+		<div class="toggle-filter-btn">
+			<svg
+				class:rotated={showFilters}
+				xmlns="http://www.w3.org/2000/svg"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<polyline points="6 9 12 15 18 9"></polyline>
+			</svg>
+			<span>{showFilters ? 'Hide' : 'Show'}</span>
+		</div>
+	</button>
+
+	{#if showFilters}
+		<div class="filter-controls" transition:slide>
+			<div class="grid lg:grid-cols-5 gap-5">
+				<div class="filter-group">
+					<h3 class="font-semibold text-white mb-2">Date Range</h3>
+					<div class="space-y-2">
+						<div class="flex items-center">
+							<label for="dateFrom" class="block text-sm font-medium text-gray-300">From:</label>
+							<input
+								type="date"
+								id="dateFrom"
+								bind:value={filters.dateFrom}
+								class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							/>
+						</div>
+						<div class="flex items-center">
+							<label for="dateTo" class="block text-sm font-medium text-gray-300">To:</label>
+							<input
+								type="date"
+								id="dateTo"
+								bind:value={filters.dateTo}
+								class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							/>
+						</div>
+					</div>
 				</div>
-				<div class="flex items-center">
-					<label for="dateTo" class="block text-sm font-medium text-gray-300">To:</label>
-					<input
-						type="date"
-						id="dateTo"
-						bind:value={filters.dateTo}
-						class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+				{#each rangeFiltersConfig as filterConfig (filterConfig.label)}
+					<RangeFilter
+						label={filterConfig.label}
+						bind:equalsAndGreaterThan={filters[filterConfig.minKey] as number}
+						bind:equalsAndLessThan={filters[filterConfig.maxKey] as number}
 					/>
+				{/each}
+				<div class="flex justify-end col-span-5">
+					<button
+						onclick={resetFilters}
+						class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+					>
+						Reset Filters
+					</button>
 				</div>
 			</div>
 		</div>
-		{#each rangeFiltersConfig as filterConfig (filterConfig.label)}
-			<RangeFilter
-				label={filterConfig.label}
-				bind:equalsAndGreaterThan={filters[filterConfig.minKey] as number}
-				bind:equalsAndLessThan={filters[filterConfig.maxKey] as number}
-			/>
-		{/each}
-		<div class="flex justify-end col-span-5">
-			<button
-				onclick={resetFilters}
-				class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-			>
-				Reset Filters
-			</button>
-		</div>
-	</div>
+	{/if}
 </div>
 
 <style>
-	.filter-controls {
+	.filter-container {
 		background-color: rgba(30, 41, 59, 0.5);
 		backdrop-filter: blur(12px);
 		border: 1px solid rgba(255, 255, 255, 0.15);
-		padding: 1rem;
 		border-radius: 0.75rem;
-		margin-bottom: -3rem;
+	}
+
+	.filter-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem;
+		cursor: pointer;
+		width: 100%;
+		background: transparent;
+		border: none;
+	}
+
+	.filter-header h2 {
+		color: white;
+		font-size: 1.25rem;
+		font-weight: 600;
+	}
+
+	.toggle-filter-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		background-color: transparent;
+		border: none;
+		color: white;
+		cursor: pointer;
+	}
+
+	.toggle-filter-btn svg {
+		transition: transform 0.3s ease;
+	}
+
+	.toggle-filter-btn .rotated {
+		transform: rotate(180deg);
+	}
+
+	.filter-controls {
+		padding: 1rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.15);
 	}
 
 	h3 {

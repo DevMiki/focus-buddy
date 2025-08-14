@@ -44,19 +44,19 @@
 	}
 </script>
 
-<div class="insights-page max-w-7xl mx-auto px-4 py-8">
-	<div class="insights-header mb-8 text-center">
-		<h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Your Study Insights</h1>
+<div class="insights-page max-w-7xl mx-auto px-8">
+	<div class="insights-header text-center">
+		<h1 class="text-3xl md:text-4xl font-bold text-white mb-4 mt-12">Your Study Insights</h1>
 		<p class="text-gray-300 max-w-2xl mx-auto">
 			Review your past sessions to understand your focus patterns. Click a session to see details.
 		</p>
 	</div>
 
-	<div class="mb-8">
+	<div class="-mb-2">
 		<FilterControls initialFilters={data.filters} onFilterChange={handleFilterChange} />
 	</div>
 
-	<div class="rounded-lg shadow-lg overflow-hidden mb-6">
+	<div class="rounded-lg shadow-lg overflow-hidden mb-2">
 		<SessionTable
 			sortBy={data.sortBy}
 			sortOrder={data.sortOrder as 'asc' | 'desc'}
@@ -66,7 +66,7 @@
 		/>
 	</div>
 	
-	<div class="mb-8">
+	<div>
 		<PaginationControls
 			pageNumber={data.pageNumber}
 			pageSize={data.pageSize}
