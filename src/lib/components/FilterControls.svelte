@@ -40,9 +40,6 @@
 
 	function resetFilters() {
 		Object.keys(filters).forEach((key) => {
-            console.log(initialFilters)
-            console.log(key)
-            console.log(initialFilters.hasOwnProperty(key))
 			if (initialFilters.hasOwnProperty(key)) {
 				filters[key] = initialFilters[key];
 			} 
