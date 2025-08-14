@@ -47,37 +47,37 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     if(dateToParam){
         filters.dateTo = new Date(dateToParam)
     }
-    const plannedDurationGtParam = url.searchParams.get('plannedDuration_gt')
+    const plannedDurationGtParam = url.searchParams.get('plannedDuration_gte')
     if(plannedDurationGtParam){
-        filters.plannedDuration_gt = parseInt(plannedDurationGtParam)
+        filters.plannedDuration_gte = parseInt(plannedDurationGtParam)
     }
-    const plannedDurationLtParam = url.searchParams.get('plannedDuration_lt')
+    const plannedDurationLtParam = url.searchParams.get('plannedDuration_lte')
     if(plannedDurationLtParam){
-        filters.plannedDuration_lt = parseInt(plannedDurationLtParam)
+        filters.plannedDuration_lte = parseInt(plannedDurationLtParam)
     }
-    const totalStudyTimeGtParam = url.searchParams.get('totalStudyTime_gt')
+    const totalStudyTimeGtParam = url.searchParams.get('totalStudyTime_gte')
     if(totalStudyTimeGtParam){
-        filters.totalStudyTime_gt = parseInt(totalStudyTimeGtParam)
+        filters.totalStudyTime_gte = parseInt(totalStudyTimeGtParam)
     }
-    const totalStudyTimeLtParam = url.searchParams.get('totalStudyTime_lt')
+    const totalStudyTimeLtParam = url.searchParams.get('totalStudyTime_lte')
     if(totalStudyTimeLtParam){
-        filters.totalStudyTime_lt = parseInt(totalStudyTimeLtParam)
+        filters.totalStudyTime_lte = parseInt(totalStudyTimeLtParam)
     }
-    const totalPauseTimeGtParam = url.searchParams.get('totalPauseTime_gt')
+    const totalPauseTimeGtParam = url.searchParams.get('totalPauseTime_gte')
     if(totalPauseTimeGtParam){
-        filters.totalPauseTime_gt = parseInt(totalPauseTimeGtParam)
+        filters.totalPauseTime_gte = parseInt(totalPauseTimeGtParam)
     }
-    const totalPauseTimeLtParam = url.searchParams.get('totalPauseTime_lt')
+    const totalPauseTimeLtParam = url.searchParams.get('totalPauseTime_lte')
     if(totalPauseTimeLtParam){
-        filters.totalPauseTime_lt = parseInt(totalPauseTimeLtParam)
+        filters.totalPauseTime_lte = parseInt(totalPauseTimeLtParam)
     }
-    const focusScoreParam = url.searchParams.get('focusScore_gt')
+    const focusScoreParam = url.searchParams.get('focusScore_gte')
     if(focusScoreParam){
-        filters.focusScore_gt = parseFloat(focusScoreParam)
+        filters.focusScore_gte = parseFloat(focusScoreParam)
     }
-    const focusScoreLtParam = url.searchParams.get('focusScore_lt')
+    const focusScoreLtParam = url.searchParams.get('focusScore_lte')
     if(focusScoreLtParam){
-        filters.focusScore_lt = parseFloat(focusScoreLtParam)
+        filters.focusScore_lte = parseFloat(focusScoreLtParam)
     }
 
 
@@ -99,14 +99,14 @@ export const load: PageServerLoad = async ({ locals, url }) => {
         filters: {
             dateFrom: filters.dateFrom?.toISOString().split('T') ?? '',
             dateTo: filters.dateTo?.toISOString().split('T') ?? '',
-            plannedDuration_gte: filters.plannedDuration_gt ?? '',
-            plannedDuration_lt: filters.plannedDuration_lt ?? '',
-            totalStudyTime_gte: filters.totalStudyTime_gt ?? '',
-            totalStudyTime_lt: filters.totalStudyTime_lt ?? '',
-            totalPauseTime_gte: filters.totalPauseTime_gt ?? '',
-            totalPauseTime_lt: filters.totalPauseTime_lt ?? '',
-            focusScore_gte: filters.focusScore_gt ?? '',
-            focusScore_lt: filters.focusScore_lt ?? '',
+            plannedDuration_gte: filters.plannedDuration_gte ?? 0,
+            plannedDuration_lte: filters.plannedDuration_lte ?? 0,
+            totalStudyTime_gte: filters.totalStudyTime_gte ?? 0,
+            totalStudyTime_lte: filters.totalStudyTime_lte ?? 0,
+            totalPauseTime_gte: filters.totalPauseTime_gte ?? 0,
+            totalPauseTime_lte: filters.totalPauseTime_lte ?? 0,
+            focusScore_gte: filters.focusScore_gte ?? 0,
+            focusScore_lte: filters.focusScore_lte ?? 0,
         }
     }
 }

@@ -32,14 +32,14 @@ type SortableSessionsColumns = keyof StudySessionsTable;
 export interface SessionFilters {
     dateFrom?: Date;
     dateTo?: Date;
-    plannedDuration_gt?: number;
-    plannedDuration_lt?: number;
-    totalStudyTime_gt?: number;
-    totalStudyTime_lt?: number;
-    totalPauseTime_gt?: number;
-    totalPauseTime_lt?: number;
-    focusScore_gt?: number;
-    focusScore_lt?: number;
+    plannedDuration_gte?: number;
+    plannedDuration_lte?: number;
+    totalStudyTime_gte?: number;
+    totalStudyTime_lte?: number;
+    totalPauseTime_gte?: number;
+    totalPauseTime_lte?: number;
+    focusScore_gte?: number;
+    focusScore_lte?: number;
 }
 export async function getPaginatedStudySessionsByUserId(userId: number, pageOptions: {
     pageSize: number,
@@ -61,29 +61,29 @@ export async function getPaginatedStudySessionsByUserId(userId: number, pageOpti
     if(filters?.dateTo){
         baseQuery = baseQuery.where('created_at', '<=', filters.dateTo.toISOString());
     }
-    if(filters?.plannedDuration_gt){
-        baseQuery = baseQuery.where('planned_duration', '>=', filters.plannedDuration_gt*60);
+    if(filters?.plannedDuration_gte){
+        baseQuery = baseQuery.where('planned_duration', '>=', filters.plannedDuration_gte*60);
     }
-    if(filters?.plannedDuration_lt){
-        baseQuery = baseQuery.where('planned_duration', '<=', filters.plannedDuration_lt*60);
+    if(filters?.plannedDuration_lte){
+        baseQuery = baseQuery.where('planned_duration', '<=', filters.plannedDuration_lte*60);
     }
-    if(filters?.totalStudyTime_gt){
-        baseQuery = baseQuery.where('total_study_time', '>=', filters.totalStudyTime_gt);
+    if(filters?.totalStudyTime_gte){
+        baseQuery = baseQuery.where('total_study_time', '>=', filters.totalStudyTime_gte);
     }
-    if(filters?.totalStudyTime_lt){
-        baseQuery = baseQuery.where('total_study_time', '<=', filters.totalStudyTime_lt);
+    if(filters?.totalStudyTime_lte){
+        baseQuery = baseQuery.where('total_study_time', '<=', filters.totalStudyTime_lte);
     }
-    if(filters?.totalPauseTime_gt){
-        baseQuery = baseQuery.where('total_pause_time', '>=', filters.totalPauseTime_gt);
+    if(filters?.totalPauseTime_gte){
+        baseQuery = baseQuery.where('total_pause_time', '>=', filters.totalPauseTime_gte);
     }
-    if(filters?.totalPauseTime_lt){
-        baseQuery = baseQuery.where('total_pause_time', '<=', filters.totalPauseTime_lt);
+    if(filters?.totalPauseTime_lte){
+        baseQuery = baseQuery.where('total_pause_time', '<=', filters.totalPauseTime_lte);
     }
-    if(filters?.focusScore_gt){
-        baseQuery = baseQuery.where('focus_score', '>=', filters.focusScore_gt);
+    if(filters?.focusScore_gte){
+        baseQuery = baseQuery.where('focus_score', '>=', filters.focusScore_gte);
     }
-    if(filters?.focusScore_lt){
-        baseQuery = baseQuery.where('focus_score', '<=', filters.focusScore_lt);
+    if(filters?.focusScore_lte){
+        baseQuery = baseQuery.where('focus_score', '<=', filters.focusScore_lte);
     }
 
     const paginatedSessions = await baseQuery

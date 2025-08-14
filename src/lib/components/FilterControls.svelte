@@ -7,49 +7,46 @@
 		onFilterChange: (filters: Record<string, string | string[] | number>) => void;
 	} = $props();
 
-	let dateFrom = $state(initialFilters.dateFrom ?? '');
-	let dateTo = $state(initialFilters.dateTo ?? '');
-	let plannedDuration_gt = $state(Number(initialFilters.plannedDuration_gt) || 0);
-	let plannedDuration_lt = $state(Number(initialFilters.plannedDuration_lt) || 0);
-	let totalStudyTime_gt = $state(Number(initialFilters.totalStudyTime_gt) || 0);
-	let totalStudyTime_lt = $state(Number(initialFilters.totalStudyTime_lt) || 0);
-	let totalPauseTime_gt = $state(Number(initialFilters.totalPauseTime_gt) || 0);
-	let totalPauseTime_lt = $state(Number(initialFilters.totalPauseTime_lt) || 0);
-	let focusScore_gt = $state(Number(initialFilters.focusScore_gt) || 0);
-	let focusScore_lt = $state(Number(initialFilters.focusScore_lt) || 0);
+	let filters: Record<string, string | string[] | number> = $state({
+		dateFrom: initialFilters.dateFrom ?? '' as string,
+		dateTo: initialFilters.dateTo ?? '' as string,
+		plannedDuration_gte: initialFilters.plannedDuration_gte as number ?? 0,
+		plannedDuration_lte: initialFilters.plannedDuration_lte as number ?? 0,
+		totalStudyTime_gte: initialFilters.totalStudyTime_gte as number ?? 0,
+		totalStudyTime_lte: initialFilters.totalStudyTime_lte as number ?? 0,
+		totalPauseTime_gte: initialFilters.totalPauseTime_gte as number ?? 0,
+		totalPauseTime_lte: initialFilters.totalPauseTime_lte as number ?? 0,
+		focusScore_gte: initialFilters.focusScore_gte as number ?? 0,
+		focusScore_lte: initialFilters.focusScore_lte as number ?? 0
+	});
+
+	function getActiveFilters(allFilters: typeof filters): Record<string, string | string[] | number> {
+		const activeFilters: Record<string, string | string[] | number> = {};
+		for (const [key, value] of Object.entries(allFilters)) {
+            if (value !== '' && value !== 0 && value !== null && value !== undefined) {
+				activeFilters[key] = value;
+			}
+		}
+        return activeFilters;
+	}
 
 	$effect(() => {
-		const allFilters: Record<string, string | string[] | number> = {
-			dateFrom,
-			dateTo,
-			plannedDuration_gt,
-			plannedDuration_lt,
-			totalStudyTime_gt,
-			totalStudyTime_lt,
-			totalPauseTime_gt,
-			totalPauseTime_lt,
-			focusScore_gt,
-			focusScore_lt
-		};
-
 		const timer = setTimeout(() => {
-			onFilterChange(allFilters);
+			onFilterChange(getActiveFilters(filters));
 		}, 500);
 
 		return () => clearTimeout(timer);
 	});
 
 	function resetFilters() {
-		dateFrom = '';
-		dateTo = '';
-		plannedDuration_gt = 0;
-		plannedDuration_lt = 0;
-		totalStudyTime_gt = 0;
-		totalStudyTime_lt = 0;
-		totalPauseTime_gt = 0;
-		totalPauseTime_lt = 0;
-		focusScore_gt = 0;
-		focusScore_lt = 0;
+		Object.keys(filters).forEach((key) => {
+            console.log(initialFilters)
+            console.log(key)
+            console.log(initialFilters.hasOwnProperty(key))
+			if (initialFilters.hasOwnProperty(key)) {
+				filters[key] = initialFilters[key];
+			} 
+		});
 	}
 </script>
 
@@ -64,7 +61,7 @@
 					<input
 						type="date"
 						id="dateFrom"
-						bind:value={dateFrom}
+						bind:value={filters.dateFrom}
 						class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
 					/>
 				</div>
@@ -73,7 +70,7 @@
 					<input
 						type="date"
 						id="dateTo"
-						bind:value={dateTo}
+						bind:value={filters.dateTo}
 						class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
 					/>
 				</div>
@@ -85,43 +82,43 @@
 			<h3 class="font-semibold text-white mb-2">Planned Duration (min)</h3>
 			<div class="space-y-2">
 				<div class="flex items-center">
-					<label for="plannedDuration_gt" class="block text-sm font-medium text-gray-300"
+					<label for="plannedDuration_gte" class="block text-sm font-medium text-gray-300"
 						>Min:</label
 					>
 					<div class="relative w-full">
 						<input
 							type="number"
 							min="0"
-							id="plannedDuration_gt"
-							bind:value={plannedDuration_gt}
+							id="plannedDuration_gte"
+							bind:value={filters.plannedDuration_gte}
 							class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 number-input"
 						/>
 						<div class="spin-buttons">
-							<button class="spin-button up" onclick={() => plannedDuration_gt++}>+</button>
+							<button class="spin-button up" onclick={() => filters.plannedDuration_gte = Number(filters.plannedDuration_gte) + 1}>+</button>
 							<button
 								class="spin-button down"
-								onclick={() => (plannedDuration_gt = Math.max(0, plannedDuration_gt - 1))}>-</button
+								onclick={() => (filters.plannedDuration_gte = Math.max(0, Number(filters.plannedDuration_gte) - 1))}>-</button
 							>
 						</div>
 					</div>
 				</div>
 				<div class="flex items-center">
-					<label for="plannedDuration_lt" class="block text-sm font-medium text-gray-300"
+					<label for="plannedDuration_lte" class="block text-sm font-medium text-gray-300"
 						>Max:</label
 					>
 					<div class="relative w-full">
 						<input
 							type="number"
 							min="0"
-							id="plannedDuration_lt"
-							bind:value={plannedDuration_lt}
+							id="plannedDuration_lte"
+							bind:value={filters.plannedDuration_lte}
 							class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 number-input"
 						/>
 						<div class="spin-buttons">
-							<button class="spin-button up" onclick={() => plannedDuration_lt++}>+</button>
+							<button class="spin-button up" onclick={() => filters.plannedDuration_lte = Number(filters.plannedDuration_lte) + 1}>+</button>
 							<button
 								class="spin-button down"
-								onclick={() => (plannedDuration_lt = Math.max(0, plannedDuration_lt - 1))}>-</button
+								onclick={() => (filters.plannedDuration_lte = Math.max(0, Number(filters.plannedDuration_lte) - 1))}>-</button
 							>
 						</div>
 					</div>
@@ -134,41 +131,41 @@
 			<h3 class="font-semibold text-white mb-2">Study Time (min)</h3>
 			<div class="space-y-2">
 				<div class="flex items-center">
-					<label for="totalStudyTime_gt" class="block text-sm font-medium text-gray-300">Min:</label
+					<label for="totalStudyTime_gte" class="block text-sm font-medium text-gray-300">Min:</label
 					>
 					<div class="relative w-full">
 						<input
 							type="number"
 							min="0"
-							id="totalStudyTime_gt"
-							bind:value={totalStudyTime_gt}
+							id="totalStudyTime_gte"
+							bind:value={filters.totalStudyTime_gte}
 							class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 number-input"
 						/>
 						<div class="spin-buttons">
-							<button class="spin-button up" onclick={() => totalStudyTime_gt++}>+</button>
+							<button class="spin-button up" onclick={() => filters.totalStudyTime_gte = Number(filters.totalStudyTime_gte) + 1}>+</button>
 							<button
 								class="spin-button down"
-								onclick={() => (totalStudyTime_gt = Math.max(0, totalStudyTime_gt - 1))}>-</button
+								onclick={() => (filters.totalStudyTime_gte = Math.max(0, Number(filters.totalStudyTime_gte) - 1))}>-</button
 							>
 						</div>
 					</div>
 				</div>
 				<div class="flex items-center">
-					<label for="totalStudyTime_lt" class="block text-sm font-medium text-gray-300">Max:</label
+					<label for="totalStudyTime_lte" class="block text-sm font-medium text-gray-300">Max:</label
 					>
 					<div class="relative w-full">
 						<input
 							type="number"
 							min="0"
-							id="totalStudyTime_lt"
-							bind:value={totalStudyTime_lt}
+							id="totalStudyTime_lte"
+							bind:value={filters.totalStudyTime_lte}
 							class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 number-input"
 						/>
 						<div class="spin-buttons">
-							<button class="spin-button up" onclick={() => totalStudyTime_lt++}>+</button>
+							<button class="spin-button up" onclick={() => filters.totalStudyTime_lte = Number(filters.totalStudyTime_lte) + 1}>+</button>
 							<button
 								class="spin-button down"
-								onclick={() => (totalStudyTime_lt = Math.max(0, totalStudyTime_lt - 1))}>-</button
+								onclick={() => (filters.totalStudyTime_lte = Math.max(0, Number(filters.totalStudyTime_lte) - 1))}>-</button
 							>
 						</div>
 					</div>
@@ -181,41 +178,41 @@
 			<h3 class="font-semibold text-white mb-2">Pause Time (min)</h3>
 			<div class="space-y-2">
 				<div class="flex items-center">
-					<label for="totalPauseTime_gt" class="block text-sm font-medium text-gray-300">Min:</label
+					<label for="totalPauseTime_gte" class="block text-sm font-medium text-gray-300">Min:</label
 					>
 					<div class="relative w-full">
 						<input
 							type="number"
 							min="0"
-							id="totalPauseTime_gt"
-							bind:value={totalPauseTime_gt}
+							id="totalPauseTime_gte"
+							bind:value={filters.totalPauseTime_gte}
 							class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 number-input"
 						/>
 						<div class="spin-buttons">
-							<button class="spin-button up" onclick={() => totalPauseTime_gt++}>+</button>
+							<button class="spin-button up" onclick={() => filters.totalPauseTime_gte = Number(filters.totalPauseTime_gte) + 1}>+</button>
 							<button
 								class="spin-button down"
-								onclick={() => (totalPauseTime_gt = Math.max(0, totalPauseTime_gt - 1))}>-</button
+								onclick={() => (filters.totalPauseTime_gte = Math.max(0, Number(filters.totalPauseTime_gte) - 1))}>-</button
 							>
 						</div>
 					</div>
 				</div>
 				<div class="flex items-center">
-					<label for="totalPauseTime_lt" class="block text-sm font-medium text-gray-300">Max:</label
+					<label for="totalPauseTime_lte" class="block text-sm font-medium text-gray-300">Max:</label
 					>
 					<div class="relative w-full">
 						<input
 							type="number"
 							min="0"
-							id="totalPauseTime_lt"
-							bind:value={totalPauseTime_lt}
+							id="totalPauseTime_lte"
+							bind:value={filters.totalPauseTime_lte}
 							class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 number-input"
 						/>
 						<div class="spin-buttons">
-							<button class="spin-button up" onclick={() => totalPauseTime_lt++}>+</button>
+							<button class="spin-button up" onclick={() => filters.totalPauseTime_lte = Number(filters.totalPauseTime_lte) + 1}>+</button>
 							<button
 								class="spin-button down"
-								onclick={() => (totalPauseTime_lt = Math.max(0, totalPauseTime_lt - 1))}>-</button
+								onclick={() => (filters.totalPauseTime_lte = Math.max(0, Number(filters.totalPauseTime_lte) - 1))}>-</button
 							>
 						</div>
 					</div>
@@ -228,41 +225,41 @@
 			<h3 class="font-semibold text-white mb-2">Focus Score (%)</h3>
 			<div class="space-y-2">
 				<div class="flex items-center">
-					<label for="focusScore_gt" class="block text-sm font-medium text-gray-300">Min:</label>
+					<label for="focusScore_gte" class="block text-sm font-medium text-gray-300">Min:</label>
 					<div class="relative w-full">
 						<input
 							type="number"
 							min="0"
 							max="100"
-							id="focusScore_gt"
-							bind:value={focusScore_gt}
+							id="focusScore_gte"
+							bind:value={filters.focusScore_gte}
 							class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 number-input"
 						/>
 						<div class="spin-buttons">
-							<button class="spin-button up" onclick={() => focusScore_gt++}>+</button>
+							<button class="spin-button up" onclick={() => filters.focusScore_gte = Number(filters.focusScore_gte) + 1}>+</button>
 							<button
 								class="spin-button down"
-								onclick={() => (focusScore_gt = Math.max(0, focusScore_gt - 1))}>-</button
+								onclick={() => (filters.focusScore_gte = Math.max(0, Number(filters.focusScore_gte) - 1))}>-</button
 							>
 						</div>
 					</div>
 				</div>
 				<div class="flex items-center">
-					<label for="focusScore_lt" class="block text-sm font-medium text-gray-300">Max:</label>
+					<label for="focusScore_lte" class="block text-sm font-medium text-gray-300">Max:</label>
 					<div class="relative w-full">
 						<input
 							type="number"
 							min="0"
 							max="100"
-							id="focusScore_lt"
-							bind:value={focusScore_lt}
+							id="focusScore_lte"
+							bind:value={filters.focusScore_lte}
 							class="w-full px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 number-input"
 						/>
 						<div class="spin-buttons">
-							<button class="spin-button up" onclick={() => focusScore_lt++}>+</button>
+							<button class="spin-button up" onclick={() => filters.focusScore_lte = Number(filters.focusScore_lte) + 1}>+</button>
 							<button
 								class="spin-button down"
-								onclick={() => (focusScore_lt = Math.max(0, focusScore_lt - 1))}>-</button
+								onclick={() => (filters.focusScore_lte = Math.max(0, Number(filters.focusScore_lte) - 1))}>-</button
 							>
 						</div>
 					</div>
