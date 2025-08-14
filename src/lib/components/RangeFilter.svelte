@@ -66,15 +66,6 @@
 </div>
 
 <style>
-    .filter-controls {
-		background-color: rgba(30, 41, 59, 0.5);
-		backdrop-filter: blur(12px);
-		border: 1px solid rgba(255, 255, 255, 0.15);
-		padding: 1rem;
-		border-radius: 0.75rem;
-		margin-bottom: -3rem;
-	}
-
 	h3 {
 		color: #e2e8f0;
 	}

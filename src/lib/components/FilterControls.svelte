@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { MysqlIntrospector } from 'kysely';
 	import RangeFilter from './RangeFilter.svelte';
 
 	let {
