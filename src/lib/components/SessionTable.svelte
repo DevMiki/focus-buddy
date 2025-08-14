@@ -97,9 +97,6 @@
 		padding: 0.75rem 1rem;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 	}
-	thead {
-		background-color: rgba(51, 65, 85, 0.7);
-	}
 	tbody tr {
 		cursor: pointer;
 		transition: background-color 0.2s ease;

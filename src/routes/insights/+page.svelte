@@ -56,7 +56,7 @@
 		<FilterControls initialFilters={data.filters} onFilterChange={handleFilterChange} />
 	</div>
 
-	<div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden mb-6">
+	<div class="rounded-lg shadow-lg overflow-hidden mb-6">
 		<SessionTable
 			sortBy={data.sortBy}
 			sortOrder={data.sortOrder as 'asc' | 'desc'}
