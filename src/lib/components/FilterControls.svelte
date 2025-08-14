@@ -289,7 +289,7 @@
 	}
 
 	input {
-		background-color: rgba(51, 65, 85, 0.7);
+		background-color: rgba(51, 65, 85, 0.4);
 		border: 1px solid rgba(255, 255, 255, 0.25);
 		color: #e2e8f0;
 		min-width: 120px;
