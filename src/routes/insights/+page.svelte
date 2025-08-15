@@ -70,7 +70,7 @@
 		<PaginationControls
 			pageNumber={data.pageNumber}
 			pageSize={data.pageSize}
-			totalStudySessionsCount={data.totalCount}
+			totalStudySessionsCount={data.totalStudySessionsCount}
 		/>
 	</div>
 

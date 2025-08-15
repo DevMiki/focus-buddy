@@ -93,11 +93,7 @@ export async function getPaginatedStudySessionsByUserId(userId: number, pageOpti
     .offset(offset)
     .execute();
 
-    const { count } = await db
-    .selectFrom('study_sessions')
-    .where('user_id', '=', userId)
-    .select(db.fn.count('id').as('count'))
-    .executeTakeFirstOrThrow();
+    const count = paginatedSessions.length;
 
     return {
         paginatedSessions,

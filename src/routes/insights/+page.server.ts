@@ -82,15 +82,16 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 
 
-    let { paginatedSessions, totalStudySessionsCount: totalCount } = await getPaginatedStudySessionsByUserId(
+    let { paginatedSessions, totalStudySessionsCount } = await getPaginatedStudySessionsByUserId(
         user.id, 
         { pageSize, offset, sortBy: sortByDbColumn, sortOrder }, 
-        filters)
+        filters);
+        console.log(paginatedSessions, totalStudySessionsCount)
 
     let sessions = mapStudySessionTableToStudySession(paginatedSessions);
     return {
         sessions,
-        totalCount,
+        totalStudySessionsCount,
         pageNumber,
         pageSize,
         sortBy,
