@@ -9,14 +9,6 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("user_id", "integer", col => col.references("auth_user.id").onDelete("cascade"))
         .execute();
 
-
-    await sql`
-            INSERT INTO auth_user (id, username)
-            OVERRIDING SYSTEM VALUE
-            VALUES (${ORPHANED_SESSION_USER_ID}), (${ORPHANED_SESSION_USERNAME})})
-            ON CONFLICT (id) DO NOTHING`.execute(db);
-
-
     await db
         .updateTable('study_sessions')
         .set({ user_id: ORPHANED_SESSION_USER_ID })

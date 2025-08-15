@@ -43,7 +43,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
 
 export async function down(db: Kysely<any>): Promise<void> {
-    await db.schema.dropTable("auth_user").execute();
-    await db.schema.dropTable("auth_session").execute();
-    await db.schema.dropTable("auth_key").execute();
+    await db.schema.dropTable("auth_user").ifExists().execute();
+    await db.schema.dropTable("auth_session").ifExists().execute();
+    await db.schema.dropTable("auth_key").ifExists().execute();
 }

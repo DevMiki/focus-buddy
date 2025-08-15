@@ -3,7 +3,7 @@
 	import type { AuthUser, Theme } from '$lib/types/database';
 	import type { Snippet } from 'svelte';
 	import '../app.css';
-	import Navbar from '$lib/Navbar.svelte';
+	import Navbar from '$lib/components/Navbar.svelte';
 
 	let {
 		data,

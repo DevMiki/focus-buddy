@@ -48,6 +48,7 @@
 		return activeFilters;
 	}
 
+
 	$effect(() => {
 		const allFilters: Record<string, string | string[] | number> = {
 			...filters

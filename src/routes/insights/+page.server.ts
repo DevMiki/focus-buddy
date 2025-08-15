@@ -40,53 +40,52 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
     const filters: SessionFilters = {}
     const dateFromParam = url.searchParams.get('dateFrom')
-    if(dateFromParam){
+    if (dateFromParam) {
         filters.dateFrom = new Date(dateFromParam)
     }
     const dateToParam = url.searchParams.get('dateTo')
-    if(dateToParam){
+    if (dateToParam) {
         filters.dateTo = new Date(dateToParam)
     }
     const plannedDurationGtParam = url.searchParams.get('plannedDuration_gte')
-    if(plannedDurationGtParam){
+    if (plannedDurationGtParam) {
         filters.plannedDuration_gte = parseInt(plannedDurationGtParam)
     }
     const plannedDurationLtParam = url.searchParams.get('plannedDuration_lte')
-    if(plannedDurationLtParam){
+    if (plannedDurationLtParam) {
         filters.plannedDuration_lte = parseInt(plannedDurationLtParam)
     }
     const totalStudyTimeGtParam = url.searchParams.get('totalStudyTime_gte')
-    if(totalStudyTimeGtParam){
+    if (totalStudyTimeGtParam) {
         filters.totalStudyTime_gte = parseInt(totalStudyTimeGtParam)
     }
     const totalStudyTimeLtParam = url.searchParams.get('totalStudyTime_lte')
-    if(totalStudyTimeLtParam){
+    if (totalStudyTimeLtParam) {
         filters.totalStudyTime_lte = parseInt(totalStudyTimeLtParam)
     }
     const totalPauseTimeGtParam = url.searchParams.get('totalPauseTime_gte')
-    if(totalPauseTimeGtParam){
+    if (totalPauseTimeGtParam) {
         filters.totalPauseTime_gte = parseInt(totalPauseTimeGtParam)
     }
     const totalPauseTimeLtParam = url.searchParams.get('totalPauseTime_lte')
-    if(totalPauseTimeLtParam){
+    if (totalPauseTimeLtParam) {
         filters.totalPauseTime_lte = parseInt(totalPauseTimeLtParam)
     }
     const focusScoreParam = url.searchParams.get('focusScore_gte')
-    if(focusScoreParam){
+    if (focusScoreParam) {
         filters.focusScore_gte = parseFloat(focusScoreParam)
     }
     const focusScoreLtParam = url.searchParams.get('focusScore_lte')
-    if(focusScoreLtParam){
+    if (focusScoreLtParam) {
         filters.focusScore_lte = parseFloat(focusScoreLtParam)
     }
 
 
-
     let { paginatedSessions, totalStudySessionsCount } = await getPaginatedStudySessionsByUserId(
-        user.id, 
-        { pageSize, offset, sortBy: sortByDbColumn, sortOrder }, 
+        user.id,
+        { pageSize, offset, sortBy: sortByDbColumn, sortOrder },
         filters);
-        console.log(paginatedSessions, totalStudySessionsCount)
+    console.log(paginatedSessions, totalStudySessionsCount)
 
     let sessions = mapStudySessionTableToStudySession(paginatedSessions);
     return {

@@ -1,4 +1,5 @@
 <script lang="ts">
+    const SECONDS_IN_MINUTE = 60;
 	let {
 		label,
 		equalsAndGreaterThan = $bindable(),
@@ -25,13 +26,13 @@
 				<div class="spin-buttons">
 					<button
 						class="spin-button up"
-						onclick={() => (equalsAndGreaterThan = Number(equalsAndGreaterThan) + 1)}
+						onclick={() => (equalsAndGreaterThan = Number(equalsAndGreaterThan) + 1) / SECONDS_IN_MINUTE}
 						>+</button
 					>
 					<button
 						class="spin-button down"
 						onclick={() =>
-							(equalsAndGreaterThan = Math.max(0, Number(equalsAndGreaterThan) - 1))}
+							(equalsAndGreaterThan = Math.max(0, Number(equalsAndGreaterThan) - 1) / SECONDS_IN_MINUTE)}
 						>-</button
 					>
 				</div>

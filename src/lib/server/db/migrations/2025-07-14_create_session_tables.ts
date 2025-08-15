@@ -13,7 +13,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('total_pause_time', 'bigint', col => col.notNull().defaultTo(0))
     .addColumn('total_pauses', 'integer', col => col.notNull().defaultTo(0))
     .addColumn('focus_score', 'bigint', col => col.notNull().defaultTo(0))
-    .addColumn('created_at', 'text', col => col.notNull().defaultTo(sql`now()::text`))
+    .addColumn('created_at', 'timestamptz', col => col.notNull().defaultTo(sql`now()::timestamptz`))
     .execute();
 
     await db.schema
