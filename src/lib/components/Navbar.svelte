@@ -5,6 +5,7 @@
 	import { fade } from 'svelte/transition';
 	import { toasts } from '../services/toasts.svelte';
 	import type { AuthUser, Theme } from '../types/database';
+	import HamburgerMenu from './HamburgerMenu.svelte';
 
 	let {
 		activeTheme = $bindable(),
@@ -52,6 +53,7 @@
 
 	<!-- THE CUSTOM DROPDOWN -->
 	<div class="right-menu">
+		<HamburgerMenu />
 		<div class="background-selector" bind:this={dropdownWrapper}>
 			<!-- 1. The Trigger Button -->
 			<button
