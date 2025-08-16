@@ -47,7 +47,8 @@
 		color: #e2e8f0;
 		border: 1px solid #444;
 		border-radius: 8px;
-		background-color: rgba(106, 106, 106, 0.3);
+		background-color: rgba(30, 41, 59, 0.5);
+		backdrop-filter: blur(12px);
 		width: 100%;
 		box-sizing: border-box;
 	}

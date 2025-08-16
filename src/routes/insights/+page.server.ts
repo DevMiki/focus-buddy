@@ -6,6 +6,8 @@ import type { StudySession } from "$lib/types/session";
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
+const SECONDS_IN_MINUTE = 60;
+
 const sortableColumnsMap: { [key: string]: keyof StudySessionsTable } = {
     createdAt: 'created_at',
     plannedDuration: 'planned_duration',
@@ -20,7 +22,6 @@ const allowedSortByClient = Object.keys(sortableColumnsMap);
 
 export const load: PageServerLoad = async ({ locals, url }) => {
     console.log('Fetching all study sessions for insights page');
-
 
     const user = locals.user;
     if (!user) throw redirect(302, '/login?redirectTo=/insights');
@@ -80,12 +81,12 @@ export const load: PageServerLoad = async ({ locals, url }) => {
         filters.focusScore_lte = parseFloat(focusScoreLtParam)
     }
 
+    normalizeFilters(filters);
 
     let { paginatedSessions, totalStudySessionsCount } = await getPaginatedStudySessionsByUserId(
         user.id,
         { pageSize, offset, sortBy: sortByDbColumn, sortOrder },
         filters);
-    console.log(paginatedSessions, totalStudySessionsCount)
 
     let sessions = mapStudySessionTableToStudySession(paginatedSessions);
     return {
@@ -111,3 +112,15 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     }
 }
 
+type DateKeys = "dateFrom" | "dateTo";
+function isDateKey(filterKey: keyof SessionFilters): filterKey is DateKeys {
+    return filterKey === "dateFrom" || filterKey === "dateTo";
+}
+
+function normalizeFilters(filters: SessionFilters): void {
+    for (const key of Object.keys(filters) as (keyof SessionFilters)[]) {
+        if (isDateKey(key)) continue;
+        const value = filters[key];
+        filters[key] = value ?? 0 * SECONDS_IN_MINUTE;
+    }
+}
