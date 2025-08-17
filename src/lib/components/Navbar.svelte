@@ -5,7 +5,10 @@
 	import { fade } from 'svelte/transition';
 	import { toasts } from '../services/toasts.svelte';
 	import type { AuthUser, Theme } from '../types/database';
+	import DropDownHamburgerMenu from './DropDownHamburgerMenu.svelte';
 	import HamburgerMenu from './HamburgerMenu.svelte';
+	import ToolbarButton from './ToolbarButton.svelte';
+	import { navItems } from '$lib/config/navigation';
 
 	let {
 		activeTheme = $bindable(),
@@ -17,6 +20,7 @@
 		user: AuthUser | null;
 	} = $props();
 	let isPanelOpen = $state(false);
+	let isHamburgerMenuActive = $state(false);
 	let dropdownWrapper: HTMLDivElement;
 
 	// This effect runs only in the browser and only when the panel is open.
@@ -41,19 +45,15 @@
 <nav>
 	<!-- Main nav links -->
 	<a href="/" class="brand"> 🧘🏽Focus Buddy </a>
-	<ul>
-		<li>
-			<a href="/">Timer</a>
-		</li>
-		<li>
-			<!-- We'll create this page next -->
-			<a href="/insights">Insights</a>
-		</li>
-	</ul>
+
+	<div class="toolbar">
+		{#each navItems as item (item.href)}
+			<ToolbarButton href={item.href} label={item.label} iconHtml={item.iconHtml} />
+		{/each}
+	</div>
 
 	<!-- THE CUSTOM DROPDOWN -->
 	<div class="right-menu">
-		<HamburgerMenu />
 		<div class="background-selector" bind:this={dropdownWrapper}>
 			<!-- 1. The Trigger Button -->
 			<button
@@ -111,26 +111,44 @@
 				<a href="/signup" class="auth-button">Sign up</a>
 			{/if}
 		{:else}
-			<form action="/logout" method="POST" use:enhance={() => {
-
-				return async({result}) => {
-					if(result.type === 'redirect') {
-						toasts.addToast({
-							message: "You have been logged out successfully",
-							type: "success",
-							duration: 3000
-						})
-						await applyAction(result);
-					}
-				}
-			}}>
+			<form
+				action="/logout"
+				method="POST"
+				use:enhance={() => {
+					return async ({ result }) => {
+						if (result.type === 'redirect') {
+							toasts.addToast({
+								message: 'You have been logged out successfully',
+								type: 'success',
+								duration: 3000
+							});
+							await applyAction(result);
+						}
+					};
+				}}
+			>
 				<button type="submit" class="auth-button">Logout</button>
 			</form>
+		{/if}
+
+		<HamburgerMenu bind:isHamburgerMenuActive />
+
+		{#if isHamburgerMenuActive}
+			<div class="hamburger-menu-dropdown">
+				<DropDownHamburgerMenu />
+			</div>
 		{/if}
 	</div>
 </nav>
 
 <style lang="postcss">
+	.toolbar {
+		display: flex;
+		gap: 0.25rem; /* gap-1 */
+		padding: 0.75rem 0; /* py-3 */
+		border-radius: 0.375rem; /* rounded-md */
+	}
+
 	/* === Main Nav Styles (Unchanged) === */
 	nav {
 		display: flex;
@@ -276,5 +294,12 @@
 		background-color: #f43f5e;
 		/* A little shadow to make it pop */
 		box-shadow: 0 0 8px #f43f5e;
+	}
+
+	.hamburger-menu-dropdown {
+		position: absolute;
+		top: calc(11% + 4px);
+		right: 0;
+		z-index: 10;
 	}
 </style>
