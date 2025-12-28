@@ -1,38 +1,32 @@
-# sv
+# Focus Buddy
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A Svelte/SvelteKit app for tracking focus/study sessions and viewing insights. Built with Svelte 5 + Vite, backed by Postgres (Kysely) and Lucia for auth.
 
-## Creating a project
+![Showcase 1](static/showcase_1.png)
 
-If you're seeing this, you've probably already done this step. Congrats!
+![Showcase 2](static/showcase_2.png)
 
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Quick start
 
 ```bash
+npm ci
+docker compose up -d
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Open the URL printed by Vite (usually `http://localhost:5173`).
 
-To create a production version of your app:
+## Database
+
+Local Postgres is provided via `docker-compose.yml` on `localhost:5433` with:
+
+- database: `study_tracker_db`
+- user/password: `postgres` / `postgres`
+
+`npm run dev` / `npm run preview` run Kysely migrations automatically. To run them manually (or for troubleshooting):
 
 ```bash
-npm run build
+npm run db:migrate:up
 ```
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+DB connection settings live in `src/lib/server/db/db.ts`.
