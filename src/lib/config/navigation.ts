@@ -13,6 +13,12 @@ export interface NavItem {
 // which can help with type inference in other parts of our app.
 export const navItems: readonly NavItem[] = [
     {
+        href: '/insights',
+        label: 'Insights',
+        iconHtml:
+            '<path stroke-linejoin="round" stroke-linecap="round" d="M6 20V14"></path><path stroke-linejoin="round" stroke-linecap="round" d="M12 20V4"></path><path stroke-linejoin="round" stroke-linecap="round" d="M18 20V10"></path>'
+    },
+    {
         href: '/messages',
         label: 'Messages',
         iconHtml:

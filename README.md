@@ -6,6 +6,15 @@ A Svelte/SvelteKit app for tracking focus/study sessions and viewing insights. B
 
 ![Showcase 2](static/showcase_2.png)
 
+![Showcase 3](static/showcase_3.png)
+
+## Stack
+
+- SvelteKit (Svelte 5) + Vite
+- Tailwind CSS
+- Postgres + Kysely
+- Lucia auth
+
 ## Quick start
 
 ```bash
@@ -30,3 +39,9 @@ npm run db:migrate:up
 ```
 
 DB connection settings live in `src/lib/server/db/db.ts`.
+
+## Useful scripts
+
+- `npm run dev` runs doctor + migrations, then starts the dev server
+- `npm run db:migrate:up` runs migrations manually
+- `npm run check` typecheck + svelte-check
